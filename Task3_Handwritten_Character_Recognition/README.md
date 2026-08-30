@@ -78,7 +78,10 @@ python evaluate.py
 python predict.py
 ```
 
-### 5. Launch Streamlit Web Application
+### 5. Launch Web Application (Flask)
 ```bash
-streamlit run app.py
+python app.py
 ```
+Then open your browser at: **http://localhost:5003**
+
+> ⚠️ Do NOT use `streamlit run app.py` — this is a Flask app, not a Streamlit app.

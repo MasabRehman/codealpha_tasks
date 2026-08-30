@@ -78,7 +78,10 @@ python evaluate.py
 python predict.py
 ```
 
-### 5. Launch Interactive Streamlit Dashboard
+### 5. Launch Interactive Web Dashboard (Flask)
 ```bash
-streamlit run app.py
+python app.py
 ```
+Then open your browser at: **http://localhost:5001**
+
+> ⚠️ Do NOT use `streamlit run app.py` — this is a Flask app, not a Streamlit app.

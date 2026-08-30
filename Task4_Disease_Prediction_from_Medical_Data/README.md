@@ -80,7 +80,10 @@ python evaluate.py
 python predict.py
 ```
 
-### 5. Launch Clinical Web Assistant
+### 5. Launch Clinical Web Assistant (Flask)
 ```bash
-streamlit run app.py
+python app.py
 ```
+Then open your browser at: **http://localhost:5004**
+
+> ⚠️ Do NOT use `streamlit run app.py` — this is a Flask app, not a Streamlit app.

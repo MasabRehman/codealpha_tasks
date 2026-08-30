@@ -1,6 +1,7 @@
 # Machine Learning & Deep Learning Project Suite
 
-This repository contains 4 machine learning and deep learning tasks organized into clean, self-contained folders with automated pipelines for dataset processing, model training, evaluation metrics, visual reporting, inference CLIs, and interactive Streamlit web apps.
+This repository contains 4 machine learning and deep learning tasks organized into clean, self-contained folders with automated pipelines for dataset processing, model training, evaluation metrics, visual reporting, inference CLIs, and interactive **Flask web apps**.
+
 
 ---
 
@@ -22,11 +23,22 @@ This repository contains 4 machine learning and deep learning tasks organized in
 python run_all.py
 ```
 
-### Launch Individual Web Applications:
-- **Task 1 (Credit Scoring Dashboard)**: `streamlit run Task1_Credit_Scoring_Model/app.py`
-- **Task 2 (Speech Emotion Recognition)**: `streamlit run Task2_Emotion_Recognition_from_Speech/app.py`
-- **Task 3 (Handwritten Character Recognition)**: `streamlit run Task3_Handwritten_Character_Recognition/app.py`
-- **Task 4 (Medical Disease Diagnostic Portal)**: `streamlit run Task4_Disease_Prediction_from_Medical_Data/app.py`
+### Launch Individual Web Apps (Flask — runs on localhost directly):
+```bash
+# Task 1 — Credit Scoring Dashboard  →  http://localhost:5001
+cd Task1_Credit_Scoring_Model && python app.py
+
+# Task 2 — Speech Emotion Recognition  →  http://localhost:5002
+cd Task2_Emotion_Recognition_from_Speech && python app.py
+
+# Task 3 — Handwritten Character Recognition  →  http://localhost:5003
+cd Task3_Handwritten_Character_Recognition && python app.py
+
+# Task 4 — Medical Disease Diagnostic Portal  →  http://localhost:5004
+cd Task4_Disease_Prediction_from_Medical_Data && python app.py
+```
+
+> ⚠️ These are **Flask** apps. Do NOT run with `streamlit run app.py`.
 
 ---
 
