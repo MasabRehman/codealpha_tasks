@@ -1,0 +1,47 @@
+{
+    "heart_disease": {
+        "ROC_AUC": 0.8745837957824639,
+        "Sensitivity": 0.9090909042294604,
+        "Specificity": 0.6603773460306162,
+        "Confusion_Matrix": [
+            [
+                35,
+                18
+            ],
+            [
+                17,
+                170
+            ]
+        ]
+    },
+    "diabetes": {
+        "ROC_AUC": 0.7730963353083168,
+        "Sensitivity": 0.5053763386518674,
+        "Specificity": 0.82993196714332,
+        "Confusion_Matrix": [
+            [
+                122,
+                25
+            ],
+            [
+                46,
+                47
+            ]
+        ]
+    },
+    "breast_cancer": {
+        "ROC_AUC": 0.9953703703703703,
+        "Sensitivity": 0.9861110974151237,
+        "Specificity": 0.9761904529478465,
+        "Confusion_Matrix": [
+            [
+                41,
+                1
+            ],
+            [
+                1,
+                71
+            ]
+        ]
+    }
+}

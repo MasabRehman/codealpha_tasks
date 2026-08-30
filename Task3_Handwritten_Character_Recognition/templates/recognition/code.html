@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Performance Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000000",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#eae7e9",
+                      "background": "#fcf8fa",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface-container": "#f0edef",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-container-low": "#f6f3f5",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-error-container": "#93000a",
+                      "primary": "#000000",
+                      "inverse-surface": "#303032",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d3e4fe",
+                      "outline": "#76777d",
+                      "secondary-container": "#d0e1fb",
+                      "on-background": "#1b1b1d",
+                      "surface-dim": "#dcd9db",
+                      "surface-tint": "#565e74",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-bright": "#fcf8fa",
+                      "primary-container": "#131b2e",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary": "#505f76",
+                      "tertiary-container": "#191c1e",
+                      "on-secondary-fixed": "#0b1c30",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-tertiary-container": "#818486",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#7c839b",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-surface-variant": "#45464d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#54647a",
+                      "inverse-primary": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "1rem",
+                      "unit-lg": "1.5rem",
+                      "gutter": "1.5rem",
+                      "margin-desktop": "2rem",
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "unit-sm": "0.5rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body {
+            background-color: #F8FAFC; /* Fallback */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopNavBar -->
+
+<div class="flex h-screen">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 bg-surface dark:bg-surface-dim border-r border-outline-variant dark:border-outline z-40 py-unit-lg justify-between">
+<div>
+<div class="px-unit-lg mb-unit-lg mt-unit-xs">
+    <div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary tracking-tight">
+        Vision OCR AI
+    </div>
+</div>
+<div class="px-unit-lg mb-unit-lg flex items-center gap-unit-sm">
+<div class="w-8 h-8 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img src="/profile.png" alt="User Logo" class="w-full h-full object-cover"  style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-medium text-primary">Core Engine</div>
+<div class="font-label-md text-label-md text-on-surface-variant">System Active</div>
+</div>
+</div>
+<ul class="flex flex-col gap-unit-xs px-unit-md">
+<li>
+<a class="flex items-center gap-unit-md bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-lg px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all opacity-80 scale-[0.98]" href="http://127.0.0.1:5001/model-dashboard">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                            Model Dashboard
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="http://127.0.0.1:5001/risk-assessment">
+<span class="material-symbols-outlined text-[18px]">assessment</span>
+                            Risk Assessment
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="http://127.0.0.1:5001/data-pipeline">
+<span class="material-symbols-outlined text-[18px]">database</span>
+                            Data Pipeline
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="http://127.0.0.1:5001/audit-logs">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                            Audit Logs
+                        </a>
+</li>
+</ul>
+</div>
+<div class="px-unit-md pb-unit-md">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-2 rounded-lg mb-unit-md hover:opacity-90 transition-opacity">
+                    Export Report
+                </button>
+
+</div>
+</nav>
+
+<main class="flex-1 ml-0 md:ml-64 pt-16 md:pt-0 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto overflow-y-auto w-full">
+<div class="mb-unit-xl">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-2">Character Recognition Engine</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg max-w-3xl">Draw a letter or digit below to evaluate the Deep CNN model in real-time.</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-unit-xl">
+
+<!-- Left Col: Canvas -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+    <div class="p-unit-lg border-b border-outline-variant bg-surface-container-low/50 flex justify-between items-center">
+        <h3 class="font-headline-md text-headline-md text-primary">Input Source</h3>
+        <button id="clear-btn" class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[18px]">delete</span> Clear
+        </button>
+    </div>
+    <div class="p-unit-lg flex-1 flex flex-col items-center justify-center bg-surface-container-highest/20 relative min-h-[350px]">
+        <canvas id="draw-canvas" width="280" height="280" class="bg-white border-2 border-outline-variant rounded-lg shadow-sm cursor-crosshair touch-none z-10 relative"></canvas>
+        <img id="upload-preview" src="" class="hidden max-w-[280px] max-h-[280px] border-2 border-outline-variant rounded-lg shadow-sm object-contain bg-white absolute z-20" />
+        <p class="text-on-surface-variant text-label-sm mt-3 text-center">Draw a character above, or upload an image to extract word sequences.</p>
+        
+        <div class="mt-4 w-full max-w-[280px] z-30">
+            <input type="file" id="image-upload" accept="image/*" class="hidden">
+            <label for="image-upload" class="cursor-pointer flex items-center justify-center gap-2 w-full py-2 border border-outline-variant rounded-lg text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors bg-white shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">upload</span> Upload Image
+            </label>
+        </div>
+    </div>
+    <div class="p-unit-md border-t border-outline-variant bg-surface-container-lowest flex gap-3">
+        <button id="recognize-btn" class="flex-1 bg-primary text-on-primary font-label-lg text-label-lg py-3 rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm">
+            <span class="material-symbols-outlined">auto_fix_high</span> Recognize
+        </button>
+    </div>
+</div>
+
+<!-- Right Col: Results -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-unit-lg flex flex-col">
+    <h3 class="font-headline-md text-headline-md text-primary mb-6">Model Prediction</h3>
+    
+    <div id="result-single" class="block">
+        <div class="flex items-center gap-6 mb-8">
+            <div class="w-32 h-32 rounded-2xl bg-primary-container text-on-primary-container flex flex-col items-center justify-center border border-on-primary-container/10 shadow-sm shrink-0">
+                <span class="text-label-sm font-label-sm opacity-80 uppercase tracking-widest mb-1">Prediction</span>
+                <span id="pred-char" class="text-7xl font-bold font-data-mono">-</span>
+            </div>
+            <div class="flex-1">
+                <div class="mb-2 text-on-surface-variant text-label-md">Confidence</div>
+                <div class="text-3xl font-bold text-primary font-data-mono mb-2" id="pred-conf">--%</div>
+                <div class="w-full bg-surface-container-highest rounded-full h-2">
+                    <div id="pred-conf-bar" class="bg-primary h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <h4 class="font-label-md text-label-md text-on-surface-variant mb-3 uppercase tracking-wider">Top 3 Candidates</h4>
+                <div id="candidates-list" class="space-y-2">
+                    <div class="text-on-surface-variant text-sm italic">No prediction yet.</div>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-label-md text-label-md text-on-surface-variant mb-3 uppercase tracking-wider">Model Vision (28x28)</h4>
+                <div class="w-24 h-24 bg-surface-container-highest border border-outline-variant rounded-md flex items-center justify-center overflow-hidden">
+                    <img id="model-vision-img" src="" class="w-full h-full object-cover hidden" style="image-rendering: pixelated;" />
+                    <span id="model-vision-placeholder" class="material-symbols-outlined text-outline text-3xl">image</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-word" class="hidden h-full flex flex-col">
+        <div class="mb-6">
+            <span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest mb-1 block">Extracted Sequence</span>
+            <div id="pred-word" class="text-4xl font-bold text-primary font-data-mono bg-surface-container-low p-4 rounded-lg border border-outline-variant break-all min-h-[4rem]"></div>
+        </div>
+        <h4 class="font-label-md text-label-md text-on-surface-variant mb-3 uppercase tracking-wider">Segmented Characters</h4>
+        <div id="word-breakdown" class="flex-1 overflow-y-auto space-y-2 max-h-[300px] pr-2">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+</div>
+</div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- TOAST NOTIFICATIONS ---
+        const showMessage = (msg, type='info') => {
+            let toast = document.createElement("div");
+            let bgClass = type === 'error' ? 'bg-error' : 'bg-primary';
+            toast.className = 'fixed bottom-6 right-6 ' + bgClass + ' text-white px-5 py-4 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 z-50 font-medium max-w-sm';
+            toast.innerHTML = '<span class="material-symbols-outlined">' + (type==='error'?'error':'info') + '</span><p class="text-sm">' + msg + '</p>';
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.classList.remove('translate-y-10', 'opacity-0'); });
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        // --- CANVAS & UPLOAD LOGIC ---
+        const canvas = document.getElementById('draw-canvas');
+        const ctx = canvas.getContext('2d');
+        const uploadInput = document.getElementById('image-upload');
+        const uploadPreview = document.getElementById('upload-preview');
+        let isDrawing = false;
+        let activeMode = 'canvas';
+        let uploadedDataUrl = null;
+        
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 14;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "black";
+        
+        const getPos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            if (e.touches) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        };
+        
+        const startDraw = (e) => {
+            if(activeMode === 'upload') return;
+            isDrawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        };
+        
+        const draw = (e) => {
+            if (!isDrawing || activeMode === 'upload') return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            e.preventDefault();
+        };
+        
+        const stopDraw = () => { isDrawing = false; ctx.closePath(); };
+        
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseout', stopDraw);
+        canvas.addEventListener('touchstart', startDraw, {passive: false});
+        canvas.addEventListener('touchmove', draw, {passive: false});
+        canvas.addEventListener('touchend', stopDraw);
+        
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e2) => {
+                    uploadedDataUrl = e2.target.result;
+                    uploadPreview.src = uploadedDataUrl;
+                    uploadPreview.classList.remove('hidden');
+                    activeMode = 'upload';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            uploadPreview.src = "";
+            uploadPreview.classList.add('hidden');
+            uploadInput.value = "";
+            activeMode = 'canvas';
+            uploadedDataUrl = null;
+            
+            document.getElementById('result-single').classList.remove('hidden');
+            document.getElementById('result-word').classList.add('hidden');
+            
+            document.getElementById('pred-char').innerText = "-";
+            document.getElementById('pred-conf').innerText = "--%";
+            document.getElementById('pred-conf-bar').style.width = "0%";
+            document.getElementById('candidates-list').innerHTML = '<div class="text-on-surface-variant text-sm italic">No prediction yet.</div>';
+            document.getElementById('model-vision-img').classList.add('hidden');
+            document.getElementById('model-vision-placeholder').classList.remove('hidden');
+        });
+
+        // --- RECOGNITION API CALL ---
+        document.getElementById('recognize-btn').addEventListener('click', async () => {
+            const dataUrl = activeMode === 'canvas' ? canvas.toDataURL('image/png') : uploadedDataUrl;
+            if(!dataUrl) { showMessage("No image to process", "error"); return; }
+            
+            let btn = document.getElementById('recognize-btn');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Processing...';
+            btn.disabled = true;
+            
+            try {
+                let res = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: dataUrl, mode: activeMode === 'canvas' ? 'single' : 'word' })
+                });
+                let d = await res.json();
+                
+                if (d.success) {
+                    if(activeMode === 'canvas') {
+                        document.getElementById('result-single').classList.remove('hidden');
+                        document.getElementById('result-word').classList.add('hidden');
+                        
+                        document.getElementById('pred-char').innerText = d.predicted_character;
+                        document.getElementById('pred-conf').innerText = d.confidence_percentage;
+                        document.getElementById('pred-conf-bar').style.width = d.confidence_percentage;
+                        
+                        let html = '';
+                        d.top3_candidates.forEach(c => {
+                            html += '<div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest border border-outline-variant/50"><span class="font-data-mono font-bold text-primary text-lg w-6 text-center">' + c.character + '</span><span class="text-sm font-data-mono text-on-surface-variant">' + (c.confidence * 100).toFixed(1) + '%</span></div>';
+                        });
+                        document.getElementById('candidates-list').innerHTML = html;
+                        
+                        if (d.processed_image_base64) {
+                            let imgEl = document.getElementById('model-vision-img');
+                            imgEl.src = d.processed_image_base64;
+                            imgEl.classList.remove('hidden');
+                            document.getElementById('model-vision-placeholder').classList.add('hidden');
+                        }
+                    } else {
+                        document.getElementById('result-single').classList.add('hidden');
+                        document.getElementById('result-word').classList.remove('hidden');
+                        
+                        document.getElementById('pred-word').innerText = d.recognized_text;
+                        let html = '';
+                        d.character_details.forEach(c => {
+                            html += '<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/50"><span class="font-data-mono font-bold text-primary text-xl w-8 text-center">' + c.character + '</span><span class="text-sm font-data-mono text-on-surface-variant">Conf: ' + (c.confidence * 100).toFixed(1) + '%</span></div>';
+                        });
+                        document.getElementById('word-breakdown').innerHTML = html;
+                    }
+                    showMessage("Recognition complete!");
+                } else {
+                    showMessage(d.error || "Prediction failed", "error");
+                }
+            } catch(e) {
+                console.error(e);
+                showMessage("Network error during prediction", "error");
+            } finally {
+                btn.innerHTML = '<span class="material-symbols-outlined">auto_fix_high</span> Recognize';
+                btn.disabled = false;
+            }
+        });
+    });
+</script>
+</body>
+</html>
+

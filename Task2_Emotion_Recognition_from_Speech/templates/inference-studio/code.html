@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emotion Recognition from Speech</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#eae7e9",
+                      "outline-variant": "#c6c6cd",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary-fixed": "#191c1e",
+                      "inverse-primary": "#bec6e0",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary-fixed": "#d3e4fe",
+                      "surface-container-low": "#f6f3f5",
+                      "on-surface-variant": "#45464d",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-variant": "#e4e2e4",
+                      "surface-bright": "#fcf8fa",
+                      "surface-tint": "#565e74",
+                      "surface-container": "#f0edef",
+                      "primary-container": "#131b2e",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed": "#e0e3e5",
+                      "inverse-surface": "#303032",
+                      "outline": "#76777d",
+                      "on-tertiary-container": "#818486",
+                      "surface-dim": "#dcd9db",
+                      "background": "#fcf8fa",
+                      "on-primary-container": "#7c839b",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#dae2fd",
+                      "on-background": "#1b1b1d",
+                      "secondary-container": "#d0e1fb",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f3f0f2",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#131b2e",
+                      "secondary": "#505f76",
+                      "primary": "#000000",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#000000",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "tertiary-container": "#191c1e",
+                      "surface-container-highest": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "gutter": "1.5rem",
+                      "margin-mobile": "1rem",
+                      "unit-sm": "0.5rem",
+                      "margin-desktop": "2rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem",
+                      "unit-lg": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "data-mono": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .nav-item-active {
+            background-color: var(--color-secondary-container);
+            color: var(--color-on-secondary-container);
+            font-weight: 700;
+        }
+        
+        .waveform-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 120px;
+            gap: 4px;
+        }
+        
+        .waveform-bar {
+            width: 8px;
+            background-color: #0F172A;
+            border-radius: 4px;
+            animation: pulse-wave 1.5s infinite ease-in-out alternate;
+        }
+
+        @keyframes pulse-wave {
+            0% { height: 10%; }
+            100% { height: 90%; }
+        }
+
+        .waveform-bar:nth-child(1) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(2) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(4) { animation-delay: 0.5s; }
+        .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+        .waveform-bar:nth-child(6) { animation-delay: 0.6s; }
+        .waveform-bar:nth-child(7) { animation-delay: 0.5s; }
+        .waveform-bar:nth-child(8) { animation-delay: 0.7s; }
+        .waveform-bar:nth-child(9) { animation-delay: 0.8s; }
+        .waveform-bar:nth-child(10) { animation-delay: 0.6s; }
+    
+        .waveform-container.idle .waveform-bar {
+            animation: none !important;
+            height: 4px !important;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex font-body-md overflow-hidden antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-6 px-4 bg-primary-container text-on-primary-container font-body-md fixed left-0 w-64 border-r border-outline-variant z-20">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface overflow-hidden flex items-center justify-center border border-outline-variant/30">
+<img alt="Research Lead Profile" class="object-cover w-full h-full" src="/profile.png" style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary m-0">Emotion AI Lab</h1>
+<p class="text-xs text-on-primary-container opacity-80 m-0">Masab Rehman - ML Engineer</p>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 transition-colors font-bold rounded-lg py-3 px-4 mb-8 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Experiment
+          </button>
+<div class="flex-1 flex flex-col gap-2">
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/signal-processor">
+<span class="material-symbols-outlined">equalizer</span>
+      Signal Processor
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/model-training">
+<span class="material-symbols-outlined">model_training</span>
+      Model Training
+    </a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 active:scale-[0.98] transition-all duration-150" href="/inference-studio">
+<span class="material-symbols-outlined filled-icon">mic</span>
+      Inference Studio
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/dataset">
+<span class="material-symbols-outlined">database</span>
+      Datasets
+    </a>
+</div>
+
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 h-screen overflow-y-auto overflow-x-hidden">
+<!-- TopAppBar -->
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto p-gutter bg-background">
+<div class="max-w-container-max mx-auto space-y-6">
+<!-- Page Header -->
+<div class="mb-8">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<p class="font-body-lg text-body-lg mb-2"><strong>Objective:</strong> Recognize <strong class="text-primary">human emotions</strong> (e.g., happy, angry, sad) from speech audio.</p>
+<p class="font-body-lg text-body-lg mb-4"><strong>Approach:</strong> Apply <strong class="text-primary">deep learning</strong> and <strong class="text-primary">speech signal processing</strong> techniques.</p>
+<h3 class="font-headline-md text-headline-md mb-2">Key Features:</h3>
+<ul class="list-disc pl-5 space-y-1 font-body-md text-body-md text-on-surface-variant">
+<li>Extract features like <strong>MFCCs (Mel-Frequency Cepstral Coefficients)</strong>.</li>
+<li>Use models like <strong>CNN-LSTM, RNN, LSTM, or Classical Random Forest</strong>.</li>
+<li>Datasets: <strong>MELD, RAVDESS, TESS, and EMO-DB</strong>.</li>
+</ul>
+</div>
+</div>
+<!-- Inference Studio Dashboard -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Input & Waveform (Span 2) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Input Control Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md m-0 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">mic_none</span>
+                                    Live Audio Input
+                                </h2>
+<span id="recording-badge" class="bg-error-container text-on-error-container opacity-0 transition-opacity font-label-md text-label-md px-2 py-1 rounded-full flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                                    RECORDING
+                                </span>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-4 mb-6 relative overflow-hidden">
+<div class="waveform-container idle">
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+<div class="waveform-bar"></div>
+</div>
+<div class="absolute bottom-2 right-2 text-xs font-data-mono text-on-surface-variant">
+                                    00:14 / 00:30 MAX
+                                </div>
+</div>
+
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-headline-md text-headline-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">mic</span> Start Recording
+</button>
+
+<div class="relative flex py-5 items-center">
+    <div class="flex-grow border-t border-outline-variant"></div>
+    <span class="flex-shrink-0 mx-4 text-on-surface-variant text-sm font-medium">OR</span>
+    <div class="flex-grow border-t border-outline-variant"></div>
+</div>
+
+<button class="w-full bg-surface-container-lowest border-2 border-dashed border-outline-variant text-primary py-8 rounded-lg font-headline-md text-headline-md flex flex-col items-center justify-center gap-2 hover:bg-surface-variant/30 transition-colors">
+<span class="material-symbols-outlined text-4xl mb-1">upload_file</span>
+<span>Upload Audio File</span>
+<span class="text-xs font-normal text-on-surface-variant">Supports .wav, .mp3 up to 10MB</span>
+</button>
+
+</div>
+<!-- Feature Extraction Preview -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h3 class="font-headline-md text-headline-md m-0 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">memory</span>
+                                Signal Processing Pipeline
+                            </h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface p-4 rounded border border-outline-variant/50">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">PRE-EMPHASIS</div>
+<div class="font-data-mono text-data-mono font-bold text-primary">0.97 α</div>
+</div>
+<div class="bg-surface p-4 rounded border border-outline-variant/50">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">FRAMING</div>
+<div class="font-data-mono text-data-mono font-bold text-primary">25ms / 10ms step</div>
+</div>
+<div class="bg-surface p-4 rounded border border-outline-variant/50">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">MFCCs EXTRACTED</div>
+<div class="font-data-mono text-data-mono font-bold text-primary">40 Coeffs</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Inference Results -->
+<div class="lg:col-span-1 space-y-6">
+<!-- Primary Emotion Result -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant mb-2">Detected Emotion</h3>
+<div class="w-32 h-32 rounded-full border-8 border-surface-container-highest flex items-center justify-center my-4 relative">
+<!-- Simulated Gauge Ring -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" r="46" stroke="#0F172A" stroke-dasharray="289" stroke-dashoffset="72" stroke-width="8"></circle>
+</svg>
+<span class="material-symbols-outlined text-5xl text-primary z-10" style="font-variation-settings: 'FILL' 1;">sentiment_satisfied</span>
+</div>
+<div class="font-headline-xl text-headline-xl text-primary font-black uppercase tracking-wide">
+                                --
+                            </div>
+<div class="font-data-mono text-data-mono text-on-surface-variant mt-2 bg-surface px-3 py-1 rounded-full border border-outline-variant/50">
+                                Confidence: --%
+                            </div>
+</div>
+<!-- Class Probabilities -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h3 class="font-headline-md text-headline-md mb-4 text-on-surface-variant">Class Distribution</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>ANGER</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>DISGUST</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>FEAR</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>JOY</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>NEUTRAL</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>SADNESS</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1 text-on-surface-variant">
+<span>SURPRISE</span>
+<span class="font-data-mono">0.0%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<!-- Inference History Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mt-6">
+<div class="p-4 border-b border-outline-variant bg-surface flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md m-0">Recent Inferences</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[600px]">
+<thead>
+<tr class="bg-surface-container-low font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+<th class="p-3 border-b border-outline-variant font-medium">Timestamp</th>
+<th class="p-3 border-b border-outline-variant font-medium">Source</th>
+<th class="p-3 border-b border-outline-variant font-medium">Duration</th>
+<th class="p-3 border-b border-outline-variant font-medium">Predicted Class</th>
+<th class="p-3 border-b border-outline-variant font-medium text-right">Confidence</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-data-mono text-on-background" id="inference-log"></tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+// Function to add a row to the inference log
+function addInferenceRow(sourceName, isLive, emotion, confidence) {
+    const tbody = document.getElementById('inference-log');
+    if (!tbody) return;
+    
+    const now = new Date();
+    const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+    
+    const icon = isLive ? 'mic' : 'upload_file';
+    const conf = (confidence * 100).toFixed(1) + '%';
+    
+    const tr = document.createElement('tr');
+    tr.className = "hover:bg-surface-variant/20 transition-colors border-b border-outline-variant/30";
+    
+    tr.innerHTML = `
+        <td class="p-3">${timestamp}</td>
+        <td class="p-3 flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-secondary">${icon}</span> ${sourceName}</td>
+        <td class="p-3">--:--</td>
+        <td class="p-3"><span class="bg-surface-variant px-2 py-1 rounded text-xs font-bold">${emotion.toUpperCase()}</span></td>
+        <td class="p-3 text-right">${conf}</td>
+    `;
+    
+    // Prepend so newest is on top
+    tbody.insertBefore(tr, tbody.firstChild);
+    
+    // Save history
+    let history = JSON.parse(localStorage.getItem("inferenceHistory") || "[]");
+    history.unshift({sourceName, isLive, emotion, confidence, timestamp});
+    if(history.length > 5) history.pop(); // keep last 5
+    localStorage.setItem("inferenceHistory", JSON.stringify(history));
+}
+
+function updateEmotionUI(data, skipSave=false) {
+    if(!skipSave) {
+        localStorage.setItem("latestInference", JSON.stringify(data));
+    }
+    if (!data.emotion) return;
+    
+    // update emotion text
+    const emoText = document.querySelector(".font-headline-xl.text-primary.font-black");
+    if (emoText) emoText.innerText = data.emotion.toUpperCase();
+
+    // update confidence
+    const confTexts = document.querySelectorAll(".font-data-mono");
+    confTexts.forEach(el => {
+        if(el.innerText.includes("Confidence:")) {
+            el.innerText = "Confidence: " + (data.confidence * 100).toFixed(1) + "%";
+        }
+    });
+
+    // update icon
+    const iconSpan = document.querySelector(".material-symbols-outlined.text-5xl");
+    if (iconSpan) {
+        let e = data.emotion.toLowerCase();
+        if (e === 'happy') iconSpan.innerText = 'sentiment_satisfied';
+        else if (e === 'sad') iconSpan.innerText = 'sentiment_sad';
+        else if (e === 'angry') iconSpan.innerText = 'mood_bad';
+        else iconSpan.innerText = 'sentiment_neutral';
+    }
+
+    // update gauge ring
+    const gauge = document.querySelector("circle.transition-all");
+    if (gauge) {
+        gauge.style.strokeDashoffset = 289 - (289 * data.confidence);
+    }
+
+    // update class distribution
+    const distContainer = document.querySelector(".space-y-4");
+    if (distContainer && data.all_scores) {
+        distContainer.innerHTML = '';
+        
+        let sortedProbs = Object.entries(data.all_scores).sort((a,b) => b[1] - a[1]);
+        
+        sortedProbs.forEach(([label, prob], index) => {
+            let p = (prob * 100).toFixed(1);
+            let isTop = index === 0;
+            let titleClass = isTop ? "font-bold text-primary" : "text-on-surface-variant";
+            let barClass = isTop ? "bg-primary" : "bg-outline";
+            
+            let labelSpan = isTop ? `<span class="font-bold text-primary">${label.toUpperCase()}</span>` : `<span>${label.toUpperCase()}</span>`;
+            
+            distContainer.innerHTML += `
+            <div>
+              <div class="flex justify-between font-label-md text-label-md mb-1 ${titleClass}">
+                ${labelSpan}
+                <span class="font-data-mono">${p}%</span>
+              </div>
+              <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+                <div class="${barClass} h-full rounded-full transition-all duration-500" style="width: ${p}%"></div>
+              </div>
+            </div>
+            `;
+        });
+    }
+}
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Load persisted state
+        try {
+            let latest = JSON.parse(localStorage.getItem("latestInference"));
+            if(latest) updateEmotionUI(latest, true);
+            
+            let history = JSON.parse(localStorage.getItem("inferenceHistory"));
+            if(history) {
+                const tbody = document.getElementById('inference-log');
+                if(tbody) tbody.innerHTML = ''; // clear mock
+                history.reverse().forEach(h => {
+                    // skip saving to localstorage while loading
+                    let origAdd = addInferenceRow;
+                    // Just manually create the row to avoid recursion
+                    let icon = h.isLive ? 'mic' : 'upload_file';
+                    let conf = (h.confidence * 100).toFixed(1) + '%';
+                    let tr = document.createElement('tr');
+                    tr.className = "hover:bg-surface-variant/20 transition-colors border-b border-outline-variant/30";
+                    tr.innerHTML = `<td class="p-3">${h.timestamp}</td><td class="p-3 flex items-center gap-2"><span class="material-symbols-outlined text-[16px] text-secondary">${icon}</span> ${h.sourceName}</td><td class="p-3">--:--</td><td class="p-3"><span class="bg-surface-variant px-2 py-1 rounded text-xs font-bold">${h.emotion.toUpperCase()}</span></td><td class="p-3 text-right">${conf}</td>`;
+                    if(tbody) tbody.insertBefore(tr, tbody.firstChild);
+                });
+            }
+        } catch(e) {}
+        // Find buttons by text
+        const buttons = document.querySelectorAll('button');
+        let recordBtn, uploadBtn, deployBtn, newExpBtn;
+        
+        buttons.forEach(b => {
+            const t = b.innerText;
+            if (t.includes("Stop Recording") || t.includes("Start Recording") || t.includes("RECORDING")) {
+                recordBtn = b;
+                recordBtn.innerHTML = '<span class="material-symbols-outlined">mic</span> Start Recording';
+                              document.querySelector(".waveform-container").classList.add("idle");
+            }
+            if (t.includes("Upload Audio")) uploadBtn = b;
+            if (t.includes("Deploy Model")) deployBtn = b;
+            if (t.includes("New Experiment")) newExpBtn = b;
+        });
+
+        
+const showMessage = (msg) => {
+    let toast = document.createElement("div");
+    toast.className = "fixed bottom-4 right-4 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 opacity-0";
+    toast.style.backgroundColor = "#313033"; // Material 3 inverse surface
+    toast.style.color = "#f4eff4";
+    toast.innerText = msg;
+    document.body.appendChild(toast);
+    
+    // Fade in
+    setTimeout(() => { toast.classList.remove("opacity-0"); }, 10);
+    
+    // Fade out and remove
+    setTimeout(() => {
+        toast.classList.add("opacity-0");
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};
+
+
+        if (deployBtn) {
+        deployBtn.addEventListener('click', async () => {
+            let originalText = deployBtn.innerHTML;
+            deployBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">sync</span> Loading...`;
+            try {
+                let res = await fetch('/api/deploy', { method: 'POST' });
+                let data = await res.json();
+                showMessage(data.message);
+            } catch(e) {
+                showMessage("Network error.");
+            }
+            deployBtn.innerHTML = originalText;
+        });
+    }
+        if (newExpBtn) {
+        newExpBtn.addEventListener('click', async () => {
+            let originalText = newExpBtn.innerHTML;
+            newExpBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">sync</span> Loading...`;
+            try {
+                let res = await fetch('/api/new-experiment', { method: 'POST' });
+                let data = await res.json();
+                showMessage(data.message);
+            } catch(e) {
+                showMessage("Network error.");
+            }
+            newExpBtn.innerHTML = originalText;
+        });
+    }
+
+        // UPLOAD LOGIC
+        if (uploadBtn) {
+            let fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "audio/*,.mp3,.rpf,.wav";
+            fileInput.style.display = "none";
+            document.body.appendChild(fileInput);
+            
+            uploadBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener("change", async (e) => {
+                if(fileInput.files.length === 0) return;
+                let formData = new FormData();
+                formData.append("audio", fileInput.files[0]);
+                
+                uploadBtn.innerHTML = '<span class="material-symbols-outlined text-4xl mb-1">hourglass_empty</span><span>Analyzing...</span><span class="text-xs font-normal text-on-surface-variant">Please wait</span>';
+                try {
+                    let res = await fetch("/api/infer", { method: "POST", body: formData });
+                    let data = await res.json();
+                    if(data.emotion) {
+                        updateEmotionUI(data);
+                          addInferenceRow(fileInput.files[0] ? fileInput.files[0].name : "upload.wav", false, data.emotion, data.confidence);
+                    } else {
+                        showMessage("Error: " + data.error);
+                    }
+                } catch(err) {
+                    showMessage("Error communicating with server.");
+                }
+                uploadBtn.innerHTML = `<span class="material-symbols-outlined text-4xl mb-1">upload_file</span>
+<span>Upload Audio File</span>
+<span class="text-xs font-normal text-on-surface-variant">Supports .wav, .mp3 up to 10MB</span>`;
+            });
+        }
+        
+        // RECORDING LOGIC
+        let isRecording = false; document.getElementById("recording-badge").classList.add("opacity-0");
+                      document.querySelector(".waveform-container").classList.add("idle");
+        let mediaRecorder;
+        let audioChunks = [];
+        
+        if (recordBtn) {
+            recordBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+                if (!isRecording) {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+                        audioChunks = [];
+                        
+                        mediaRecorder.addEventListener("dataavailable", event => {
+                            audioChunks.push(event.data);
+                        });
+                        
+                        mediaRecorder.addEventListener("stop", async () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            let formData = new FormData();
+                            formData.append("audio", audioBlob, "recorded.wav");
+                            
+                            recordBtn.innerText = "Analyzing...";
+                            try {
+                                let res = await fetch("/api/infer", { method: "POST", body: formData });
+                                let data = await res.json();
+                                if(data.emotion) {
+                                    updateEmotionUI(data);
+                          addInferenceRow("Live Mic", true, data.emotion, data.confidence);
+                                } else {
+                                    showMessage("Error: " + data.error);
+                                }
+                            } catch(err) {
+                                showMessage("Error processing audio.");
+                            }
+                            recordBtn.innerHTML = '<span class="material-symbols-outlined">mic</span> Start Recording';
+                              document.querySelector(".waveform-container").classList.add("idle");
+                        });
+                        
+                        recordBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span> Stop Recording';
+                          document.querySelector(".waveform-container").classList.remove("idle");
+                        recordBtn.style.backgroundColor = "#ba1a1a"; // error color
+                        isRecording = true; document.getElementById("recording-badge").classList.remove("opacity-0");
+                    } catch(err) {
+                        showMessage("Microphone access denied.");
+                    }
+                } else {
+                    mediaRecorder.stop();
+                    isRecording = false; document.getElementById("recording-badge").classList.add("opacity-0");
+                      document.querySelector(".waveform-container").classList.add("idle");
+                    recordBtn.style.backgroundColor = "";
+                }
+            });
+        }
+    });
+    </script>
+</body></html>

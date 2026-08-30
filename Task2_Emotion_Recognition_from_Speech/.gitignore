@@ -1,0 +1,6 @@
+*.tar.gz
+*.zip
+*.npy
+*.pkl
+*.mp4
+*.wav

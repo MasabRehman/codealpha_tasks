@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HCR_ENGINE - Datasets</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#261901",
+                        "background": "#131315",
+                        "surface-variant": "#353436",
+                        "on-surface": "#e4e2e3",
+                        "terminal-bg": "#0b0e14",
+                        "bounding-box": "#7c839b",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-background": "#e4e2e3",
+                        "on-primary-container": "#d0d8f2",
+                        "primary-fixed": "#dae2fc",
+                        "on-error-container": "#ffdad6",
+                        "confidence-low": "#f87171",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#dbc39b",
+                        "secondary-container": "#3e465c",
+                        "surface-container-highest": "#353436",
+                        "outline": "#909097",
+                        "on-secondary-container": "#adb5ce",
+                        "surface-dim": "#131315",
+                        "on-secondary-fixed-variant": "#3e465c",
+                        "primary-container": "#565e74",
+                        "stroke-active": "#ffffff",
+                        "confidence-high": "#4ade80",
+                        "primary": "#bec6e0",
+                        "surface-container-lowest": "#0e0e10",
+                        "grid-line": "#1e293b",
+                        "on-tertiary-container": "#eed6ac",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-fixed-variant": "#3e465b",
+                        "on-tertiary-fixed-variant": "#554425",
+                        "outline-variant": "#45464c",
+                        "inverse-surface": "#e4e2e3",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-container-high": "#2a2a2b",
+                        "on-primary": "#283044",
+                        "tertiary-container": "#6e5c3b",
+                        "surface-container": "#1f1f21",
+                        "tertiary": "#dbc39b",
+                        "surface": "#131315",
+                        "inverse-primary": "#565e74",
+                        "inverse-on-surface": "#303032",
+                        "surface-container-low": "#1b1b1d",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "tertiary-fixed": "#f8dfb5",
+                        "on-surface-variant": "#c6c6cd",
+                        "surface-tint": "#bec6e0",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#39393b",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#3d2e11",
+                        "on-secondary": "#283044",
+                        "secondary": "#bec6e0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stroke-weight-bold": "8px",
+                        "canvas-margin": "2rem",
+                        "stroke-weight-thin": "2px",
+                        "gutter-technical": "1px",
+                        "unit-base": "4px",
+                        "sidebar-width": "320px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["JetBrains Mono", "monospace"],
+                        "headline-lg": ["Space Grotesk", "sans-serif"],
+                        "body-lg": ["JetBrains Mono", "monospace"],
+                        "headline-xl": ["Space Grotesk", "sans-serif"],
+                        "data-terminal": ["JetBrains Mono", "monospace"],
+                        "label-caps": ["JetBrains Mono", "monospace"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+                        "data-terminal": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .grid-bg {
+            background-size: 20px 20px;
+            background-image:
+                linear-gradient(to right, rgba(30, 41, 59, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.2) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary font-label-caps text-label-caps w-sidebar-width h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-canvas-margin z-20">
+<div class="px-6 pb-8 border-b border-outline-variant mb-6 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT overflow-hidden border border-primary">
+<img src="/static/profile.png" alt="Profile" class="w-full h-full object-cover" style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">HCR_ENGINE</h1>
+<p class="font-data-terminal text-data-terminal text-primary">Masab Rehman - ML Engineer</p>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<button onclick="fetch('/api/new_model', {method: 'POST'}).then(() => window.location.reload())" class="mt-4 w-full py-2 bg-primary-container text-on-primary-container hover:opacity-90 active:scale-95 transition-transform font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span> NEW_MODEL
+</button>
+</div>
+<nav class="flex-1 px-4 flex flex-col gap-1">
+<a class="bg-primary-container text-on-primary-container border-l-stroke-weight-thin border-stroke-active active:scale-95 transition-transform flex items-center gap-3 px-4 py-3 rounded-DEFAULT" href="/datasets"><span class="material-symbols-outlined">database</span> Datasets </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform flex items-center gap-3 px-4 py-3 rounded-DEFAULT" href="/architecture"><span class="material-symbols-outlined">layers</span> Architect </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform flex items-center gap-3 px-4 py-3 rounded-DEFAULT" href="/"><span class="material-symbols-outlined">draw</span> Testing </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform flex items-center gap-3 px-4 py-3 rounded-DEFAULT" href="/logs"><span class="material-symbols-outlined">analytics</span> Logs </a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-sidebar-width flex-1 flex flex-col h-screen overflow-hidden bg-background">
+<!-- TopNavBar (Mobile only for Nav, but using for header here based on JSON) -->
+<header class="bg-background text-primary font-body-md text-body-md w-full top-0 border-b border-outline-variant flex justify-between items-center px-6 py-4 z-40 md:hidden">
+<div class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">HCR.LAB_v2.0</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high p-2 transition-all active:opacity-80">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high p-2 transition-all active:opacity-80">terminal</span>
+</div>
+</header>
+<!-- Top Header Area (Desktop) -->
+<header class="hidden md:flex bg-background border-b border-outline-variant justify-between items-center px-8 py-6 z-30 shrink-0">
+<div class="flex flex-col gap-1">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Dataset Registry</h2>
+<div class="flex items-center gap-2 text-on-surface-variant font-data-terminal text-data-terminal">
+<span class="w-2 h-2 bg-confidence-high block"></span>
+<span>SYSTEM_READY :: 2 ACTIVE DATASETS</span>
+</div>
+</div>
+
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start content-start">
+<!-- Left Column: Datasets & Gallery -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Overview Stats Bento -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-technical bg-outline-variant border-stroke-weight-thin border-outline-variant">
+<!-- IAM Words Block -->
+<div class="bg-surface-container p-6 flex flex-col gap-4 relative group">
+<div class="absolute top-0 right-0 p-2 opacity-10 font-data-terminal text-4xl">01</div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-lg text-headline-lg text-primary">IAM Words</h3>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 font-label-caps text-label-caps uppercase border border-outline-variant">DIGITS</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-4 font-data-terminal text-data-terminal">
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Samples</div>
+<div class="text-on-surface text-lg">70,000</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Classes</div>
+<div class="text-on-surface text-lg">10 (0-9)</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Format</div>
+<div class="text-on-surface">28x28 Grayscale</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Status</div>
+<div class="text-confidence-high">INDEXED</div>
+</div>
+</div>
+</div>
+<!-- IAM Cursive Dataset Block -->
+<div class="bg-surface-container p-6 flex flex-col gap-4 relative group">
+<div class="absolute top-0 right-0 p-2 opacity-10 font-data-terminal text-4xl">02</div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-lg text-headline-lg text-primary">IAM Cursive Dataset</h3>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 font-label-caps text-label-caps uppercase border border-outline-variant">WORDS</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-4 font-data-terminal text-data-terminal">
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Samples</div>
+<div class="text-on-surface text-lg">814,255</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Classes</div>
+<div class="text-on-surface text-lg">62 (A-z, 0-9)</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Format</div>
+<div class="text-on-surface">28x28 Grayscale</div>
+</div>
+<div>
+<div class="text-on-surface-variant uppercase text-xs">Status</div>
+<div class="text-primary">INDEXING 82%</div>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-1 mt-2">
+<div class="bg-primary h-1 w-[82%]"></div>
+</div>
+</div>
+</div>
+<!-- Gallery Section -->
+<div class="border-stroke-weight-thin border-outline-variant bg-surface-container flex flex-col">
+<div class="border-b border-outline-variant p-4 flex justify-between items-center bg-surface-container-high">
+<h3 class="font-body-lg text-body-lg uppercase font-bold text-on-surface tracking-wider">Sample Gallery</h3>
+<div class="flex gap-2">
+<button id="btn-words" onclick="toggleDataset(1)" class="bg-surface-container-highest border border-outline-variant px-3 py-1 font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors">IAM Words</button>
+<button id="btn-cursive" onclick="toggleDataset(2)" class="bg-primary border border-primary px-3 py-1 font-label-caps text-label-caps text-on-primary hover:bg-primary-fixed transition-colors">IAM Cursive Dataset</button>
+</div>
+</div>
+<div class="p-4 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-gutter-technical bg-outline-variant">
+<!-- Repeated grid items to simulate gallery -->
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent hover:border-primary transition-colors group cursor-pointer">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+<img class="w-full h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity p-2" data-alt="A macro shot of a handwritten letter 'A' isolated on a dark terminal background, showing raw pixelated anti-aliasing typical of a 28x28 grayscale IAM Words dataset format. Brutalist technical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY9RGxcVHtOQGcYerSdksEyxsnczOH1KdKUbP8iKRs_dNv74GpJdghm-_K0FlfmFbiVFExl__GOAnrHMPTgfsLb4nrlvVB_XZwEWRa5Xkk6F-U89XukPvpeomIoU4zW-GeG4jyBhRN5DY9q6LQ4HQ0Tf-BWqyJIUhYt16IGhTPtPBGUE7JqcqPEUHWBGKmZ28mLFIkixskINVOh7RFJmIBTz_odmUVOnVbj0LR8iYbPkVeeNooO3k0"/>
+<div class="absolute bottom-0 left-0 right-0 bg-background/90 border-t border-outline-variant flex justify-between px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="font-data-terminal text-[10px] text-primary">GT: A</span>
+<span class="font-data-terminal text-[10px] text-on-surface-variant">#41</span>
+</div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent hover:border-primary transition-colors group cursor-pointer">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+<img class="w-full h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity p-2" data-alt="A macro shot of a handwritten digit '7' isolated on a dark terminal background, showing raw pixelated anti-aliasing typical of a 28x28 grayscale IAM Words dataset format. Brutalist technical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu8UzG7WDBjEuZEij0p14gsK4XR-xPBLQTdBVOCvhxuIXErLpyFwq68ooKGR_ntiUD8cq-Y-Jw1pi5v3TulHpvNuXn8zBsuIxp4CgDriGA1GFBVsVBWw91dSQyhNMQ4cbuDWCJvhkL05-Z3XBm3RsW-B7zsMwii7Bk85VSk5QDXWb3F7nzvCneBJ0rVhgcZcwgO5QkHq8Jc37KitudsYeoQcppusR6tatxt54KojyyUNsXDZQ4m3En"/>
+<div class="absolute bottom-0 left-0 right-0 bg-background/90 border-t border-outline-variant flex justify-between px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="font-data-terminal text-[10px] text-primary">GT: 7</span>
+<span class="font-data-terminal text-[10px] text-on-surface-variant">#37</span>
+</div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent hover:border-primary transition-colors group cursor-pointer">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+<img class="w-full h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity p-2" data-alt="A macro shot of a handwritten letter 'g' isolated on a dark terminal background, showing raw pixelated anti-aliasing typical of a 28x28 grayscale IAM Words dataset format. Brutalist technical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOU06X4X1VtZQogxSaAeyj2BJgP8pRrVfRxZsFQku3o9UXXz8FVRKnBoV1l3ltZVqlmUQsa64VCeFPNisgny_MzBugxodULYzSiFWuyzXmG8LB-bSrDqdaPXze111vmsCIPjTmIda0Q150UlOkf2P6r_fES5mFvNqwwKOz81-B08uknfmsqh2EREtNXLqAM0Lu0w6qPwwI48d7GHZcz1A9AslW6wSLQZ13YcDhXvsxWFme-6onHhuY"/>
+<div class="absolute bottom-0 left-0 right-0 bg-background/90 border-t border-outline-variant flex justify-between px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="font-data-terminal text-[10px] text-primary">GT: g</span>
+<span class="font-data-terminal text-[10px] text-on-surface-variant">#67</span>
+</div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent hover:border-primary transition-colors group cursor-pointer">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+<img class="w-full h-full object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-opacity p-2" data-alt="A macro shot of a handwritten letter 'Q' isolated on a dark terminal background, showing raw pixelated anti-aliasing typical of a 28x28 grayscale IAM Words dataset format. Brutalist technical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtERcMvUBJwvd0Aj2Fqdsp-Bb5Joch5pTJY07NEaLnxfAebDGJC9W5gSnid7nv8tCKLPrMjxNby8BuiZ2iZv9xlxNcGi-qQAwTGYPB63Ash-YtgXoIaOZKIYUKXtkO3IbWLXxtZkpIudI7ASjT52U6toGXMEgEndBeZg_vmg3vM3soPRpuuranTBhqZxIIl0vUXQ2nnf6A4c6KlJ7CRvOU2gwSns4I_TqeIcTvhyuNMigXCInNpL9I"/>
+<div class="absolute bottom-0 left-0 right-0 bg-background/90 border-t border-outline-variant flex justify-between px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="font-data-terminal text-[10px] text-primary">GT: Q</span>
+<span class="font-data-terminal text-[10px] text-on-surface-variant">#51</span>
+</div>
+</div>
+<!-- Add a few blank ones to show grid structure -->
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent group">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent group">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent group">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+</div>
+<div class="bg-terminal-bg aspect-square relative flex items-center justify-center border border-transparent group">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+</div>
+</div>
+<div class="border-t border-outline-variant p-2 bg-surface-container-highest flex justify-between items-center text-on-surface-variant font-data-terminal text-[11px]">
+<span>SHOWING: 4 / 814,255</span>
+<div class="flex gap-4">
+<button class="hover:text-primary uppercase">PREV_PAGE</button>
+<button class="hover:text-primary uppercase">NEXT_PAGE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Settings & Upload -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Data Ingestion Box -->
+<div class="border-stroke-weight-thin border-outline-variant bg-surface-container flex flex-col">
+<div class="border-b border-outline-variant p-4 bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">upload_file</span>
+<h3 class="font-body-lg text-body-lg uppercase font-bold text-on-surface tracking-wider">Ingestion_Node</h3>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<div class="border-2 border-dashed border-outline-variant hover:border-primary transition-colors bg-surface-container-lowest p-8 flex flex-col items-center justify-center text-center cursor-pointer group" onclick="document.getElementById('file-upload').click()">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary mb-2 transition-colors">cloud_upload</span>
+<span class="font-label-caps text-label-caps text-on-surface uppercase block mb-1">Select source file</span>
+<span class="font-data-terminal text-xs text-on-surface-variant">.idx, .csv, .npz supported</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-data-terminal text-data-terminal text-on-surface-variant">Target Format</span>
+<select class="bg-transparent border-none text-on-surface font-data-terminal text-data-terminal focus:ring-0 p-0 text-right cursor-pointer">
+<option class="bg-surface-container">28x28 Grayscale</option>
+<option class="bg-surface-container">32x32 RGB</option>
+</select>
+</div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-data-terminal text-data-terminal text-on-surface-variant">Normalization</span>
+<select class="bg-transparent border-none text-on-surface font-data-terminal text-data-terminal focus:ring-0 p-0 text-right cursor-pointer">
+<option class="bg-surface-container">[0, 1] Float</option>
+<option class="bg-surface-container">[-1, 1] Centered</option>
+</select>
+</div>
+</div>
+<button onclick="alert('Parse Initiated!')" class="w-full bg-surface-container-highest border border-outline-variant text-on-surface py-2 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors uppercase font-label-caps text-label-caps flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+                            INITIATE_PARSE
+                        </button>
+</div>
+</div>
+<!-- Preprocessing Pipeline -->
+<div class="border-stroke-weight-thin border-outline-variant bg-surface-container flex flex-col">
+<div class="border-b border-outline-variant p-4 bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_fix_high</span>
+<h3 class="font-body-lg text-body-lg uppercase font-bold text-on-surface tracking-wider">Augmentation</h3>
+</div>
+<div class="p-0 flex flex-col divide-y divide-outline-variant font-data-terminal text-data-terminal">
+<label class="flex justify-between items-center p-4 hover:bg-surface-container-highest cursor-pointer">
+<span class="text-on-surface">Random Rotation (±15°)</span>
+<input checked="" class="bg-surface-container-lowest border-outline-variant text-primary focus:ring-primary focus:ring-offset-background rounded-none" type="checkbox"/>
+</label>
+<label class="flex justify-between items-center p-4 hover:bg-surface-container-highest cursor-pointer">
+<span class="text-on-surface">Gaussian Noise</span>
+<input class="bg-surface-container-lowest border-outline-variant text-primary focus:ring-primary focus:ring-offset-background rounded-none" type="checkbox"/>
+</label>
+<label class="flex justify-between items-center p-4 hover:bg-surface-container-highest cursor-pointer">
+<span class="text-on-surface">Elastic Transform</span>
+<input class="bg-surface-container-lowest border-outline-variant text-primary focus:ring-primary focus:ring-offset-background rounded-none" type="checkbox"/>
+</label>
+<label class="flex justify-between items-center p-4 hover:bg-surface-container-highest cursor-pointer">
+<span class="text-on-surface">Invert Colors</span>
+<input checked="" class="bg-surface-container-lowest border-outline-variant text-primary focus:ring-primary focus:ring-offset-background rounded-none" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+<input type="file" id="file-upload" class="hidden" accept=".idx,.csv,.npz" onchange="alert('File selected for ingestion: ' + this.files[0].name)" />
+
+<script>
+function toggleDataset(type) {
+    var b1 = document.getElementById('btn-words');
+    var b2 = document.getElementById('btn-cursive');
+    var activeClass = "bg-primary border border-primary px-3 py-1 font-label-caps text-label-caps text-on-primary hover:bg-primary-fixed transition-colors";
+    var inactiveClass = "bg-surface-container-highest border border-outline-variant px-3 py-1 font-label-caps text-label-caps text-primary hover:bg-surface-container transition-colors";
+    
+    if(type === 1) {
+        b1.className = activeClass;
+        b2.className = inactiveClass;
+    } else {
+        b1.className = inactiveClass;
+        b2.className = activeClass;
+    }
+}
+</script>
+</body>
+</html>

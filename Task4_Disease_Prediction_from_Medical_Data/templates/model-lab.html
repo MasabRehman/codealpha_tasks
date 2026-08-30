@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Lab &amp; Classifier Setup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#00daf3",
+                        "tertiary-fixed-dim": "#f1bc95",
+                        "on-primary": "#0c3446",
+                        "secondary-fixed": "#9cf0ff",
+                        "primary-container": "#002b3d",
+                        "inconclusive-state": "#FFC107",
+                        "inverse-surface": "#e2e2e4",
+                        "outline-variant": "#42484c",
+                        "surface-container-high": "#292a2c",
+                        "secondary": "#bdf4ff",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#333536",
+                        "inverse-primary": "#406377",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-secondary-fixed": "#001f24",
+                        "surface-dim": "#121415",
+                        "outline": "#8c9196",
+                        "surface-tint": "#a8cbe2",
+                        "error-container": "#93000a",
+                        "on-secondary": "#00363d",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#a8cbe2",
+                        "on-primary-fixed-variant": "#274b5e",
+                        "on-surface-variant": "#c2c7cc",
+                        "on-primary-fixed": "#001e2c",
+                        "surface-variant": "#333536",
+                        "primary-fixed": "#c4e7ff",
+                        "positive-state": "#00FFC2",
+                        "secondary-container": "#00e3fd",
+                        "inverse-on-surface": "#2f3132",
+                        "on-surface": "#e2e2e4",
+                        "on-tertiary-fixed-variant": "#633e21",
+                        "on-background": "#e2e2e4",
+                        "surface-container-lowest": "#0d0e10",
+                        "background": "#121415",
+                        "on-tertiary-container": "#b38561",
+                        "surface-bright": "#38393b",
+                        "tertiary": "#f1bc95",
+                        "surface": "#121415",
+                        "on-primary-container": "#7093a9",
+                        "on-secondary-container": "#00616d",
+                        "on-tertiary": "#49290c",
+                        "negative-state": "#FF3D00",
+                        "surface-container-low": "#1a1c1d",
+                        "on-secondary-fixed-variant": "#004f58",
+                        "tertiary-container": "#3e2005",
+                        "diagnostic-grid": "#0A1921",
+                        "surface-container": "#1e2021",
+                        "terminal-text": "#E0E0E0",
+                        "tertiary-fixed": "#ffdcc4",
+                        "primary-fixed-dim": "#a8cbe2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "panel-sm": "320px",
+                        "margin": "24px",
+                        "panel-lg": "480px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-sm": ["JetBrains Mono"],
+                        "data-display": ["JetBrains Mono"],
+                        "body-lg": ["JetBrains Mono"],
+                        "headline-xl": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "data-display": ["18px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .diagnostic-input:focus { outline: none; border-color: theme('colors.secondary-fixed-dim'); box-shadow: 0 0 0 2px rgba(0, 218, 243, 0.2); }
+        .glow-border { border: 1px solid theme('colors.secondary-fixed-dim'); }
+        .panel-border { border: 1px solid theme('colors.outline-variant'); }
+    </style>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #121415;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #42484c;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #8c9196;
+        }
+        
+        /* Experimental Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            background: #00daf3;
+            cursor: pointer;
+            border: 2px solid #002b3d;
+            border-radius: 0;
+            margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #42484c;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #8c9196;
+        }
+        
+        /* Custom Toggle */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #00daf3;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #00daf3;
+        }
+    </style></head>
+<body class="bg-background text-on-surface font-body-md h-screen overflow-hidden flex">
+<!-- TopNavBar (Mobile Only) -->
+<header class="md:hidden w-full h-16 bg-background dark:bg-background flex justify-between items-center px-gutter w-full border-b border-outline-variant fixed top-0 z-50">
+<div class="font-headline-md text-headline-md font-bold text-secondary-fixed-dim tracking-tighter">AEXIS DIAGNOSTICS</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim cursor-pointer active:opacity-80 hover:bg-surface-container-high transition-colors p-2 rounded" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim cursor-pointer active:opacity-80 hover:bg-surface-container-high transition-colors p-2 rounded" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex flex-col bg-surface-container-lowest border-r border-outline-variant h-screen w-panel-sm fixed left-0 top-0 z-40 pt-16">
+<div class="px-gutter mb-8">
+<div class="font-headline-md text-headline-md font-black text-secondary-fixed-dim tracking-tighter mb-2">AEXIS DIAGNOSTICS</div>
+<div class="flex items-center gap-3 mt-4 p-3 bg-surface-container-low border border-outline-variant rounded">
+<img class="w-10 h-10 rounded-full object-cover border border-secondary-fixed-dim" data-alt="A highly detailed, technical avatar representing an AI diagnostic core, featuring sharp geometric lines, deep teal and cyan glowing accents against a stark black background. High contrast, clinical and precise style." src="/static/user_avatar.png" style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Masab Rehman</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Data Scientist / ML Engineer</div>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<a href="/clear-history" class="w-full mt-6 bg-secondary-fixed-dim text-on-secondary-container font-label-md text-label-md py-3 px-4 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity rounded" style="text-decoration: none;"><span class="material-symbols-outlined text-[18px]">add</span>NEW DIAGNOSTIC</a>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-surface-container-highest transition-all duration-150 rounded" href="/">
+<span class="material-symbols-outlined">person_add</span>
+<span class="font-label-md text-label-md">Patient Intake</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 bg-primary-container text-secondary-fixed-dim border-l-4 border-secondary-fixed-dim font-bold rounded-r" href="/model-lab">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">science</span>
+<span class="font-label-md text-label-md">Model Lab</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-surface-container-highest transition-all duration-150 rounded" href="/predict">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Clinical Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 text-on-surface-variant opacity-70 hover:opacity-100 hover:bg-surface-container-highest transition-all duration-150 rounded" href="/database-registry">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-md text-label-md">Database Registry</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-[320px] pt-16 md:pt-0 h-screen overflow-y-auto custom-scrollbar bg-diagnostic-grid"><form action="/model-lab" id="model-form" method="POST">
+<div class="max-w-7xl mx-auto p-margin md:p-8 space-y-6">
+<!-- Header section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-outline-variant pb-4 mb-6">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Model Laboratory</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Configure and evaluate diagnostic classification models.</p>
+</div>
+<div class="mt-4 md:mt-0 flex gap-4">
+<button class="border border-outline-variant text-on-surface px-4 py-2 hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span class="font-label-md text-label-md">LOAD PRESET</span>
+</button>
+<button class="bg-secondary-fixed-dim text-background px-4 py-2 border border-secondary-fixed-dim hover:bg-secondary-fixed transition-colors flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+<span class="font-label-md text-label-md font-bold">INITIATE TRAINING</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column: Configuration -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Classifier Selection -->
+<section class="bg-surface-container-lowest border border-outline-variant p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim">account_tree</span>
+                            Architecture
+                        </h2>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-3 border border-outline-variant bg-surface-container hover:border-secondary-fixed-dim cursor-pointer transition-colors">
+<input class="bg-transparent border-outline-variant text-secondary-fixed-dim focus:ring-secondary-fixed-dim focus:ring-offset-background" value="SVM_RBF" {% if selected_classifier == "SVM_RBF" %}checked{% endif %} name="classifier" type="radio"/>
+<span class="font-body-lg text-body-lg">Support Vector Machine (SVM)</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-secondary-fixed-dim bg-primary-container cursor-pointer transition-colors">
+<input  class="bg-transparent border-secondary-fixed-dim text-secondary-fixed-dim focus:ring-secondary-fixed-dim focus:ring-offset-background" value="Random_Forest" {% if selected_classifier == "Random_Forest" %}checked{% endif %} name="classifier" type="radio"/>
+<div class="flex-1">
+<span class="font-body-lg text-body-lg text-secondary-fixed-dim font-medium">Random Forest</span>
+</div>
+<span class="material-symbols-outlined text-secondary-fixed-dim" data-icon="check_circle">check_circle</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-outline-variant bg-surface-container hover:border-secondary-fixed-dim cursor-pointer transition-colors">
+<input class="bg-transparent border-outline-variant text-secondary-fixed-dim focus:ring-secondary-fixed-dim focus:ring-offset-background" value="Gradient_Boosting" {% if selected_classifier == "Gradient_Boosting" %}checked{% endif %} name="classifier" type="radio"/>
+<span class="font-body-lg text-body-lg">XGBoost</span>
+</label>
+<label class="flex items-center gap-3 p-3 border border-outline-variant bg-surface-container hover:border-secondary-fixed-dim cursor-pointer transition-colors">
+<input class="bg-transparent border-outline-variant text-secondary-fixed-dim focus:ring-secondary-fixed-dim focus:ring-offset-background" value="Logistic_Regression" {% if selected_classifier == "Logistic_Regression" %}checked{% endif %} name="classifier" type="radio"/>
+<span class="font-body-lg text-body-lg">Logistic Regression</span>
+</label>
+</div>
+</section>
+<!-- Cross Validation Toggle -->
+<section class="bg-surface-container-lowest border border-outline-variant p-6">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium">Cross-Validation</h3>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Enable k-fold cross validation for robust evaluation.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input  class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-background border-2 border-outline-variant appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out translate-x-6 border-secondary-fixed-dim" {% if cv_toggle %}checked{% endif %} id="cv-toggle" name="cv_toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer bg-secondary-fixed-dim" for="cv-toggle"></label>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant" id="cv-settings">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Folds (k)</label>
+<div class="flex items-center gap-4">
+<input class="flex-1" value="{{ cv_folds }}" id="k-fold-slider" max="10" min="2" name="cv_folds" type="range" value="5"/>
+<span class="font-data-display text-data-display text-secondary-fixed-dim w-8 text-right" id="k-fold-val">{{ cv_folds }}</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Middle Column: Hyperparameters -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-6">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary-fixed-dim">tune</span>
+                        Hyperparameters
+                    </h2>
+<div class="space-y-8">
+<!-- Param 1 -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">n_estimators</label>
+<span class="font-data-display text-data-display text-secondary-fixed-dim">{{ n_estimators }}</span>
+</div>
+<input class="w-full" value="{{ n_estimators }}" max="500" min="10" name="n_estimators" type="range" value="100"/>
+<div class="flex justify-between mt-1 text-[10px] text-outline font-label-md">
+<span>10</span>
+<span>500</span>
+</div>
+</div>
+<!-- Param 2 -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">max_depth</label>
+<span class="font-data-display text-data-display text-secondary-fixed-dim">None</span>
+</div>
+<select class="w-full bg-surface-container border border-outline-variant text-on-surface p-2 font-body-md focus:border-secondary-fixed-dim focus:ring-1 focus:ring-secondary-fixed-dim outline-none rounded-none" name="max_depth">
+<option {% if max_depth == "None" %}selected{% endif %}>None</option>
+<option {% if max_depth == "5" %}selected{% endif %}>5</option>
+<option {% if max_depth == "10" %}selected{% endif %}>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+</div>
+<!-- Param 3 -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">min_samples_split</label>
+<span class="font-data-display text-data-display text-secondary-fixed-dim">{{ min_samples_split }}</span>
+</div>
+<input class="w-full" value="{{ min_samples_split }}" max="20" min="2" name="min_samples_split" type="range" value="2"/>
+</div>
+<!-- Param 4 -->
+<div>
+<div class="flex justify-between mb-2">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">criterion</label>
+</div>
+<input value="{{ criterion }}" id="criterion_input" name="criterion" type="hidden"/><div class="flex border border-outline-variant">
+<button class="flex-1 bg-primary-container text-secondary-fixed-dim border-r border-outline-variant py-2 font-label-md text-label-md" id="btn-gini" onclick="document.getElementById('criterion_input').value='gini'; this.className='flex-1 bg-primary-container text-secondary-fixed-dim font-label-md py-2 border border-secondary-fixed-dim'; document.getElementById('btn-entropy').className='flex-1 bg-surface-container text-on-surface-variant font-label-md py-2 border border-outline-variant hover:text-on-surface transition-colors';" type="button">GINI</button>
+<button class="flex-1 bg-surface-container text-on-surface-variant hover:bg-surface-container-high py-2 font-label-md text-label-md" id="btn-entropy" onclick="document.getElementById('criterion_input').value='entropy'; this.className='flex-1 bg-primary-container text-secondary-fixed-dim font-label-md py-2 border border-secondary-fixed-dim'; document.getElementById('btn-gini').className='flex-1 bg-surface-container text-on-surface-variant font-label-md py-2 border border-outline-variant hover:text-on-surface transition-colors';" type="button">ENTROPY</button>
+</div>
+</div>
+<div class="p-4 bg-[#0A1921] border border-outline-variant font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary mr-1 align-text-bottom">info</span>
+                            Adjusting these parameters directly affects model variance. Current configuration optimized for recall.
+                        </div>
+</div>
+</div>
+<!-- Right Column: Performance Preview & Logs -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Performance Prediction -->
+<section class="flex-1 bg-surface-container-lowest border border-outline-variant p-6 flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-positive-state">monitoring</span>
+                            Predicted Performance
+                        </h2>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="border border-outline-variant p-4 bg-[#0A1921] text-center">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">EXPECTED ACCURACY</div>
+<div class="font-headline-xl text-headline-xl text-positive-state">{{ expected_accuracy }}%</div>
+<div class="font-label-md text-label-md text-outline mt-1">± 1.4% CI</div>
+</div>
+<div class="border border-outline-variant p-4 bg-[#0A1921] text-center">
+<div class="font-label-md text-label-md text-on-surface-variant mb-1">EST. LATENCY</div>
+<div class="font-headline-xl text-headline-xl text-secondary-fixed-dim">12ms</div>
+<div class="font-label-md text-label-md text-outline mt-1">per inference</div>
+</div>
+</div>
+<!-- Mini Confusion Matrix Preview -->
+<div class="mt-auto">
+<div class="font-label-md text-label-md text-on-surface-variant mb-3 border-b border-outline-variant pb-1">ESTIMATED CONFUSION MATRIX</div>
+<div class="grid grid-cols-3 gap-1 font-body-sm text-center">
+<div></div>
+<div class="text-outline">Pred P</div>
+<div class="text-outline">Pred N</div>
+<div class="text-outline flex items-center justify-end pr-2">Act P</div>
+<div class="bg-primary-container border border-secondary-fixed-dim text-secondary-fixed-dim p-2 font-data-display text-data-display">TP</div>
+<div class="bg-surface-container-high border border-outline-variant text-on-surface-variant p-2 font-data-display text-data-display">FN</div>
+<div class="text-outline flex items-center justify-end pr-2">Act N</div>
+<div class="bg-surface-container-high border border-outline-variant text-on-surface-variant p-2 font-data-display text-data-display">FP</div>
+<div class="bg-primary-container border border-secondary-fixed-dim text-secondary-fixed-dim p-2 font-data-display text-data-display">TN</div>
+</div>
+</div>
+</section>
+<!-- Terminal Output -->
+<section class="h-48 bg-surface-container-lowest border border-outline-variant p-4 flex flex-col font-body-sm text-terminal-text overflow-hidden">
+<div class="font-label-md text-label-md text-outline mb-2 pb-1 border-b border-outline-variant flex justify-between">
+<span>SYSTEM.OUT</span>
+<span class="material-symbols-outlined text-[14px]">terminal</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-1 opacity-80">{{ system_logs | safe }}</div>
+</section>
+</div>
+</div>
+</div>
+</form></main>
+<script>
+        // Simple script to handle range slider display updates
+        document.getElementById('k-fold-slider').addEventListener('input', function(e) {
+            document.getElementById('k-fold-val').textContent = e.target.value;
+        });
+
+        const cvToggle = document.getElementById('cv-toggle');
+        const cvSettings = document.getElementById('cv-settings');
+
+        cvToggle.addEventListener('change', function() {
+            if(this.checked) {
+                cvSettings.style.opacity = '1';
+                cvSettings.style.pointerEvents = 'auto';
+            } else {
+                cvSettings.style.opacity = '0.3';
+                cvSettings.style.pointerEvents = 'none';
+            }
+        });
+    </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Classifier active state
+    const radios = document.querySelectorAll('input[name="classifier"]');
+    function updateActiveState(activeRadio) {
+        radios.forEach(r => {
+            let label = r.closest('label');
+            label.className = "flex items-center gap-3 p-3 border border-outline-variant bg-surface-container hover:border-secondary-fixed-dim cursor-pointer transition-colors";
+            let textSpan = label.querySelector('span.font-body-lg');
+            if (textSpan) textSpan.className = "font-body-lg text-body-lg";
+            let icon = label.querySelector('.material-symbols-outlined');
+            if (icon) icon.remove();
+        });
+        
+        let activeLabel = activeRadio.closest('label');
+        activeLabel.className = "flex items-center gap-3 p-3 border border-secondary-fixed-dim bg-primary-container cursor-pointer transition-colors";
+        let activeText = activeLabel.querySelector('span.font-body-lg');
+        if (activeText) activeText.className = "font-body-lg text-body-lg text-secondary-fixed-dim font-medium";
+        
+        let icon = document.createElement('span');
+        icon.className = "material-symbols-outlined text-secondary-fixed-dim";
+        icon.innerHTML = "check_circle";
+        activeLabel.appendChild(icon);
+    }
+    
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            updateActiveState(e.target);
+        });
+        if (radio.checked) {
+            updateActiveState(radio);
+        }
+    });
+
+    // Range slider updates
+    const ranges = document.querySelectorAll('input[type="range"]');
+    ranges.forEach(range => {
+        range.addEventListener('input', (e) => {
+            // Find the display span which is in the previous div
+            let name = e.target.getAttribute('name');
+            if (name === 'cv_folds') {
+                document.getElementById('k-fold-val').innerText = e.target.value;
+            } else if (name === 'n_estimators' || name === 'min_samples_split') {
+                // The span is in the previous sibling div
+                let prevDiv = e.target.previousElementSibling;
+                if (prevDiv && prevDiv.tagName === 'DIV') {
+                    let valSpan = prevDiv.querySelector('span');
+                    if (valSpan) valSpan.innerText = e.target.value;
+                }
+            }
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let crit = "{{ criterion }}";
+    if (crit === 'entropy') {
+        document.getElementById('btn-entropy').className='flex-1 bg-primary-container text-secondary-fixed-dim font-label-md py-2 border border-secondary-fixed-dim'; 
+        document.getElementById('btn-gini').className='flex-1 bg-surface-container text-on-surface-variant font-label-md py-2 border border-outline-variant hover:text-on-surface transition-colors';
+    } else {
+        document.getElementById('btn-gini').className='flex-1 bg-primary-container text-secondary-fixed-dim font-label-md py-2 border border-secondary-fixed-dim'; 
+        document.getElementById('btn-entropy').className='flex-1 bg-surface-container text-on-surface-variant font-label-md py-2 border border-outline-variant hover:text-on-surface transition-colors';
+    }
+});
+</script>
+</body></html>

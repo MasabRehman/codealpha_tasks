@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Signal Processor Dashboard - Emotion AI Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#eae7e9",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-container": "#54647a",
+                        "on-tertiary-fixed": "#191c1e",
+                        "inverse-primary": "#bec6e0",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-low": "#f6f3f5",
+                        "on-surface-variant": "#45464d",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e4e2e4",
+                        "surface-bright": "#fcf8fa",
+                        "surface-tint": "#565e74",
+                        "surface-container": "#f0edef",
+                        "primary-container": "#131b2e",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-fixed": "#e0e3e5",
+                        "inverse-surface": "#303032",
+                        "outline": "#76777d",
+                        "on-tertiary-container": "#818486",
+                        "surface-dim": "#dcd9db",
+                        "background": "#fcf8fa",
+                        "on-primary-container": "#7c839b",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "on-background": "#1b1b1d",
+                        "secondary-container": "#d0e1fb",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f3f0f2",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary": "#505f76",
+                        "primary": "#000000",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface": "#fcf8fa",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1b1d",
+                        "tertiary-container": "#191c1e",
+                        "surface-container-highest": "#e4e2e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "unit-md": "1rem",
+                        "gutter": "1.5rem",
+                        "margin-mobile": "1rem",
+                        "unit-sm": "0.5rem",
+                        "margin-desktop": "2rem",
+                        "unit-xl": "2rem",
+                        "unit-xs": "0.25rem",
+                        "unit-lg": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom scrollbar for data tables */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
+        
+        .grid-bg {
+            background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px), linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-6 px-4 bg-primary-container text-on-primary-container font-body-md fixed left-0 w-64 border-r border-outline-variant z-20">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface overflow-hidden flex items-center justify-center border border-outline-variant/30">
+<img alt="Research Lead Profile" class="object-cover w-full h-full" data-alt="A professional headshot of a female research scientist wearing a lab coat or clean white collared shirt. She has a neutral, focused expression. The background is a slightly blurred, high-tech laboratory environment with cool, modern lighting. High-key lighting, bright white and navy aesthetic. Highly detailed, 8k resolution, photorealistic corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGQaJEMGANgY9shOL2vOv-NofJ_Q_A6zRKiP_FtPUhJVSYVgLiZ1veAX10u31FhnG51TR0kvGkv5VyloZ8Is-PmsACj9WxlBDvy7YO3mwjLTh2MpbFzZYpGqVdsTnjCVkHAncfc3ZA-QsKDZ6OOAFjBdnNJ-bdP5zL-lPgsRc8qyluPj27QH2ZOHuC9MjO4m6SKBL-N_f14Yxajqt_KpGMa3gmftDyaEaJiaVj55n-aiHWyvIVTGWD"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">Emotion AI Lab</h1>
+<p class="text-xs text-on-primary-container opacity-80">Masab Rehman - ML Engineer</p>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 transition-colors font-bold rounded-lg py-3 px-4 mb-8 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Experiment
+        </button>
+<div class="flex-1 flex flex-col gap-2">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 active:scale-[0.98] transition-all duration-150" href="#">
+<span class="material-symbols-outlined filled-icon">equalizer</span>
+                Signal Processor
+            </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">model_training</span>
+                Model Training
+            </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">mic</span>
+                Live Inference
+            </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">database</span>
+                Datasets
+            </a>
+</div>
+<div class="mt-auto pt-6 border-t border-outline-variant/30 flex flex-col gap-2">
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">terminal</span>
+                API Docs
+            </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-0 md:ml-64 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-gutter bg-surface-container-lowest border-b border-outline-variant z-10 sticky top-0">
+<div class="flex items-center gap-6">
+<div class="font-headline-md text-headline-md font-black text-primary md:hidden">ERS</div>
+<div class="hidden md:flex font-headline-md text-headline-md font-black text-primary">ERS Technical Studio</div>
+<div class="hidden md:flex items-center gap-6 ml-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all text-sm" href="#">Analytics</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-medium text-sm" href="#">Experiments</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-all text-sm" href="#">Logs</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-surface rounded-full border border-outline-variant text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-all" placeholder="Search signals..." type="text"/>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors active:opacity-70"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 hover:bg-surface-variant rounded-full transition-colors active:opacity-70"><span class="material-symbols-outlined">help_outline</span></button>
+</div>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded text-sm font-medium hover:bg-primary/90 transition-colors hidden sm:block active:opacity-70">
+                    Deploy Model
+                </button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-outline-variant ml-2 sm:ml-0" data-alt="A small, circular avatar image of a male user with short dark hair, wearing glasses and a dark blue shirt. The background is plain white. Professional corporate headshot style, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYvgOuzXcyY66yvsWFDzB8bLjDESM238ytHyCK97Hy_5z4sE4xWXb04Vls-ualXtl90YpgwgS1Njv3xOhrGSjbUYjEZIlAfcQ9mEcjjFfizb5lh1NYacJP-bbx3NwVgZBE66430Ls75NadEK7t61U85H6pIPAT3UGAFJ03-tAG0sAL0qIWu1Iqhm0yFTSx-2F5bnVEO0Lfv1zFNaBImXqSCn-XM3wPWXvFB8K1cypn-vyudAvlWore"/>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-surface-container-low p-gutter">
+<div class="max-w-container-max mx-auto space-y-gutter">
+<!-- Header & Task Details -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 text-sm font-medium text-secondary mb-1">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+                            TASK 2
+                        </div>
+<h2 class="font-headline-xl text-headline-xl text-on-background mb-2">Emotion Recognition from Speech</h2>
+<p class="text-body-lg text-on-surface-variant max-w-3xl">Apply deep learning and speech signal processing techniques to extract MFCC features and classify human emotions from audio datasets.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface text-on-surface border border-outline-variant rounded font-medium text-sm flex items-center gap-2 hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+                            Import Audio
+                        </button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded font-medium text-sm flex items-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                            Run Processor
+                        </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Waveform Viewer (Spans 2/3 cols) -->
+<div class="lg:col-span-2 xl:col-span-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">graphic_eq</span>
+                                Raw Audio Signal
+                            </h3>
+<div class="flex items-center gap-3 text-sm">
+<span class="text-on-surface-variant">RAVDESS_03-01-05-01-01-01-01.wav</span>
+<span class="px-2 py-0.5 bg-secondary-fixed text-on-secondary-fixed rounded text-xs font-medium">Angry</span>
+</div>
+</div>
+<div class="p-4 flex-1 relative min-h-[200px] grid-bg flex flex-col justify-center">
+<!-- Simulated Waveform using div bars -->
+<div class="flex items-end justify-between h-32 gap-[1px] w-full px-2 opacity-80" id="waveform-container">
+<!-- JS will populate this -->
+</div>
+<!-- Time Axis -->
+<div class="flex justify-between text-[10px] text-outline mt-2 px-2 border-t border-outline-variant/30 pt-1">
+<span>0.0s</span>
+<span>1.5s</span>
+<span>3.0s</span>
+</div>
+</div>
+</div>
+<!-- Extraction Controls -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface-bright">
+<h3 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">tune</span>
+                                MFCC Settings
+                            </h3>
+</div>
+<div class="p-4 space-y-4 flex-1">
+<div class="space-y-1">
+<label class="text-xs font-medium text-on-surface-variant flex justify-between">
+<span>Sample Rate (Hz)</span>
+<span class="text-primary font-mono">22050</span>
+</label>
+<input class="w-full h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="44100" min="8000" type="range" value="22050"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-on-surface-variant flex justify-between">
+<span>N-MFCC</span>
+<span class="text-primary font-mono">40</span>
+</label>
+<input class="w-full h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="128" min="13" type="range" value="40"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-medium text-on-surface-variant flex justify-between">
+<span>Hop Length</span>
+<span class="text-primary font-mono">512</span>
+</label>
+<select class="w-full border-outline-variant rounded text-sm py-1.5 focus:border-primary focus:ring-primary">
+<option>256</option>
+<option selected="">512</option>
+<option>1024</option>
+</select>
+</div>
+<div class="pt-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-sm font-medium">Apply Pre-emphasis</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Spectrogram / Mel-Spectrogram (Spans full width in grid) -->
+<div class="col-span-1 lg:col-span-3 xl:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col lg:flex-row overflow-hidden min-h-[300px]">
+<div class="w-full lg:w-1/4 p-4 border-b lg:border-b-0 lg:border-r border-outline-variant bg-surface-bright flex flex-col justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary">blur_on</span>
+                                    Feature Extraction
+                                </h3>
+<p class="text-sm text-on-surface-variant mb-4">Visualizing the Mel-frequency cepstral coefficients derived from the audio signal, acting as the primary input for the CNN model.</p>
+<div class="space-y-2">
+<div class="flex justify-between text-xs border-b border-outline-variant/50 pb-1">
+<span class="text-on-surface-variant">Frames</span>
+<span class="font-mono font-medium">130</span>
+</div>
+<div class="flex justify-between text-xs border-b border-outline-variant/50 pb-1">
+<span class="text-on-surface-variant">Coefficients</span>
+<span class="font-mono font-medium">40</span>
+</div>
+<div class="flex justify-between text-xs pb-1">
+<span class="text-on-surface-variant">Shape</span>
+<span class="font-mono font-medium">(40, 130)</span>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full py-2 bg-surface text-primary border border-primary rounded font-medium text-sm hover:bg-primary/5 transition-colors">
+                                Export Features (CSV)
+                            </button>
+</div>
+<div class="flex-1 p-4 bg-[#0a0a0a] relative overflow-hidden flex items-center justify-center">
+<!-- Placeholder for Heatmap/Spectrogram -->
+<div class="absolute inset-0 opacity-80" style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%); mix-blend-mode: screen;"></div>
+<div class="z-10 text-white/50 text-xs font-mono absolute top-2 right-2">MEL SPECTROGRAM HEATMAP</div>
+<!-- Simulated Heatmap Grid -->
+<div class="w-full h-full grid grid-cols-20 grid-rows-10 gap-0 opacity-60 z-10" id="heatmap-container">
+<!-- JS populated -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+
+const showMessage = (msg) => {
+    let toast = document.createElement("div");
+    toast.className = "fixed bottom-4 right-4 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 opacity-0";
+    toast.style.backgroundColor = "#313033"; // Material 3 inverse surface
+    toast.style.color = "#f4eff4";
+    toast.innerText = msg;
+    document.body.appendChild(toast);
+    
+    // Fade in
+    setTimeout(() => { toast.classList.remove("opacity-0"); }, 10);
+    
+    // Fade out and remove
+    setTimeout(() => {
+        toast.classList.add("opacity-0");
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};
+
+        // Generate pseudo-random waveform
+        const waveformContainer = document.getElementById('waveform-container');
+        if (waveformContainer) {
+            for (let i = 0; i < 150; i++) {
+                const bar = document.createElement('div');
+                const height = Math.random() > 0.8 ? Math.random() * 90 + 10 : Math.random() * 30 + 5;
+                const isCenter = i > 50 && i < 100; // Fake some speech activity in the middle
+                const finalHeight = isCenter ? height * 1.5 : height;
+                
+                bar.className = 'w-1 bg-primary/80 rounded-t-sm transition-all duration-300';
+                bar.style.height = `${Math.min(100, finalHeight)}%`;
+                waveformContainer.appendChild(bar);
+            }
+        }
+
+        // Generate fake heatmap
+        const heatmapContainer = document.getElementById('heatmap-container');
+        if(heatmapContainer) {
+            // Simplified grid generation for visual effect
+            heatmapContainer.style.display = 'grid';
+            heatmapContainer.style.gridTemplateColumns = 'repeat(50, 1fr)';
+            heatmapContainer.style.gridTemplateRows = 'repeat(20, 1fr)';
+            
+            for(let i=0; i<1000; i++) {
+                const cell = document.createElement('div');
+                // Create a basic pattern that looks somewhat like a spectrogram
+                const row = Math.floor(i / 50);
+                const col = i % 50;
+                
+                // Formants logic simulation
+                let intensity = Math.random() * 0.3; // noise
+                if (row > 15 && col > 10 && col < 40) intensity += 0.5; // low freq energy
+                if ((row > 10 && row < 13) && (col > 15 && col < 35)) intensity += 0.6; // formant 1
+                if ((row > 5 && row < 8) && (col > 20 && col < 30)) intensity += 0.4; // formant 2
+                
+                // Map intensity to a color (dark blue to yellow/red)
+                const hue = (1 - Math.min(1, intensity)) * 240; // 240 is blue, 0 is red
+                const light = Math.min(1, intensity) * 60 + 10;
+                
+                cell.style.backgroundColor = `hsl(${hue}, 100%, ${light}%)`;
+                heatmapContainer.appendChild(cell);
+            }
+        }
+    </script>
+</body></html>

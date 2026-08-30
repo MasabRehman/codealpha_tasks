@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Training - ERS Technical Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#eae7e9",
+                      "outline-variant": "#c6c6cd",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary-fixed": "#191c1e",
+                      "inverse-primary": "#bec6e0",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary-fixed": "#d3e4fe",
+                      "surface-container-low": "#f6f3f5",
+                      "on-surface-variant": "#45464d",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-variant": "#e4e2e4",
+                      "surface-bright": "#fcf8fa",
+                      "surface-tint": "#565e74",
+                      "surface-container": "#f0edef",
+                      "primary-container": "#131b2e",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed": "#e0e3e5",
+                      "inverse-surface": "#303032",
+                      "outline": "#76777d",
+                      "on-tertiary-container": "#818486",
+                      "surface-dim": "#dcd9db",
+                      "background": "#fcf8fa",
+                      "on-primary-container": "#7c839b",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#dae2fd",
+                      "on-background": "#1b1b1d",
+                      "secondary-container": "#d0e1fb",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f3f0f2",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#131b2e",
+                      "secondary": "#505f76",
+                      "primary": "#000000",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#000000",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "tertiary-container": "#191c1e",
+                      "surface-container-highest": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "gutter": "1.5rem",
+                      "margin-mobile": "1rem",
+                      "unit-sm": "0.5rem",
+                      "margin-desktop": "2rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem",
+                      "unit-lg": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "data-mono": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { background-color: #F8FAFC; }
+        .data-card { background-color: #FFFFFF; border: 1px solid #E2E8F0; transition: box-shadow 0.2s ease-in-out; }
+        .data-card:hover { box-shadow: 0px 4px 6px -1px rgba(15, 23, 42, 0.05); }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex font-body-md overflow-hidden antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-6 px-4 bg-primary-container text-on-primary-container font-body-md fixed left-0 w-64 border-r border-outline-variant z-20">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface overflow-hidden flex items-center justify-center border border-outline-variant/30">
+<img alt="Research Lead Profile" class="object-cover w-full h-full" src="/profile.png" style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary m-0">Emotion AI Lab</h1>
+<p class="text-xs text-on-primary-container opacity-80 m-0">Masab Rehman - ML Engineer</p>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 transition-colors font-bold rounded-lg py-3 px-4 mb-8 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Experiment
+          </button>
+<div class="flex-1 flex flex-col gap-2">
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/signal-processor">
+<span class="material-symbols-outlined">equalizer</span>
+      Signal Processor
+    </a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 active:scale-[0.98] transition-all duration-150" href="/model-training">
+<span class="material-symbols-outlined filled-icon">model_training</span>
+      Model Training
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/inference-studio">
+<span class="material-symbols-outlined">mic</span>
+      Inference Studio
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/dataset">
+<span class="material-symbols-outlined">database</span>
+      Datasets
+    </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-64 h-screen overflow-y-auto overflow-x-hidden">
+<!-- TopAppBar -->
+<!-- Canvas -->
+<main class="flex-1 p-gutter max-w-container-max mx-auto w-full flex flex-col gap-6">
+<!-- Header Section -->
+<div class="flex justify-end items-end mb-2">
+
+<div class="flex gap-2">
+<button class="px-3 py-1.5 border border-outline-variant rounded text-sm font-medium hover:bg-surface-variant/20 transition-colors">Save Config</button>
+<button id="startTrainingBtn" class="px-3 py-1.5 bg-primary text-white rounded text-sm font-medium hover:bg-primary/90 transition-colors">Start Training</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column: Architecture Definition (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Objective & Approach Card -->
+<div class="data-card rounded-xl p-6">
+<h3 class="font-headline-md text-headline-md text-primary mb-4 border-b border-outline-variant pb-2">Experiment Parameters</h3>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<h4 class="text-xs font-bold text-outline uppercase tracking-wider mb-2">Objective</h4>
+<p class="text-sm leading-relaxed">Recognize <span class="font-semibold text-primary">human emotions</span> (e.g., happy, angry, sad) from speech audio.</p>
+</div>
+<div>
+<h4 class="text-xs font-bold text-outline uppercase tracking-wider mb-2">Approach</h4>
+<p class="text-sm leading-relaxed">Apply <span class="font-semibold text-primary">deep learning</span> and <span class="font-semibold text-primary">speech signal processing</span> techniques.</p>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/50">
+<h4 class="text-xs font-bold text-outline uppercase tracking-wider mb-3">Key Features</h4>
+<ul class="flex gap-4">
+<li class="bg-surface px-3 py-2 rounded-lg border border-outline-variant/30 text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">graphic_eq</span>
+                                    Extract <b>MFCCs</b>
+</li>
+<li class="bg-surface px-2 py-1 rounded-lg border border-outline-variant/30 text-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary" style="font-size: 16px;">account_tree</span>
+                                    <select id="modelSelect" class="bg-transparent border-0 text-sm font-semibold text-primary focus:ring-0 cursor-pointer">
+                                        <option value="cnn">Speech CNN-LSTM</option>
+                                        <option value="rnn">RNN (Standard Recurrent)</option>
+                                        <option value="lstm">LSTM (Pure Long Short-Term Memory)</option>
+                                        <option value="rf">Random Forest (Classical)</option>
+                                    </select>
+                                </li>
+<li class="bg-surface px-3 py-2 rounded-lg border border-outline-variant/30 text-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary" style="font-size: 16px;">dataset</span>
+                                    Datasets: <b id="selectedDatasetsText">MELD</b>
+                                </li>
+</ul>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/50">
+    <h4 class="text-xs font-bold text-outline uppercase tracking-wider mb-3">Hyperparameters</h4>
+    <div class="grid grid-cols-3 gap-4">
+        <div>
+            <label class="block text-xs font-medium text-on-surface-variant mb-1">Epochs</label>
+            <input type="number" id="hp-epochs" value="15" class="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface focus:outline-none focus:border-primary">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-on-surface-variant mb-1">Batch Size</label>
+            <select id="hp-batch" class="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface focus:outline-none focus:border-primary">
+                <option value="16">16</option>
+                <option value="32" selected>32</option>
+                <option value="64">64</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-on-surface-variant mb-1">Learning Rate</label>
+            <input type="number" id="hp-lr" value="0.001" step="0.0001" class="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-sm text-on-surface focus:outline-none focus:border-primary">
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- Model Architecture Builder -->
+<div class="data-card rounded-xl p-0 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">account_tree</span>
+                                Model Architecture View
+                            </h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-white border border-outline-variant rounded text-xs font-mono">Sequential</span>
+</div>
+</div>
+<!-- High Density Table for Layers -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse" id="arch-table">
+<thead><tr class="border-b border-surface-container-high text-xs text-on-surface-variant uppercase tracking-wider">
+<th class="py-3 px-4 font-medium">Layer (Type)</th><th class="py-3 px-4 font-medium">Output Shape</th>
+<th class="py-3 px-4 font-medium text-right">Param #</th><th class="py-3 px-4 font-medium">Activation / Config</th>
+</tr></thead><tbody id="arch-body"></tbody>
+<tfoot><tr class="border-t border-surface-container-high text-sm text-on-surface-variant">
+<td colspan="4" class="py-3 px-4 flex justify-between"><span id="arch-total">Total params: 0</span></td>
+</tr></tfoot></table>
+</div>
+<div class="p-3 bg-surface text-xs text-on-surface-variant flex justify-between border-t border-outline-variant">
+<span>Total params: 249,352</span>
+<span>Trainable params: 249,352</span>
+<span>Non-trainable params: 0</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Training Progress & Datasets (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Training Progress -->
+<div class="data-card rounded-xl p-5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-base text-primary">Training Progress</h3>
+<span class="flex h-2 w-2 relative">
+
+<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+</span>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="text-on-surface-variant">Epoch 25 / 25</span>
+<span class="font-data-mono">100%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-3 border border-outline-variant/50 rounded-lg bg-surface">
+<p class="text-xs text-outline mb-1">Accuracy (Val)</p>
+<p class="font-data-mono text-lg font-semibold text-green-700">49.4%</p>
+</div>
+<div class="p-3 border border-outline-variant/50 rounded-lg bg-surface">
+<p class="text-xs text-outline mb-1">Loss (Val)</p>
+<p class="font-data-mono text-lg font-semibold text-primary">1.477</p>
+</div>
+</div>
+<!-- Minimal Sparkline Placeholder -->
+<div class="mt-4 pt-4 border-t border-outline-variant/50 relative h-24 w-full bg-surface-container-low rounded flex items-center justify-center text-xs text-outline">
+                                [Loss/Accuracy Chart Render Space]
+                            </div>
+</div>
+</div>
+<!-- Dataset Configuration -->
+<div class="data-card rounded-xl p-5">
+<h3 class="font-headline-md text-base text-primary mb-4">Active Datasets</h3>
+<div class="space-y-3" id="datasetCheckboxes">
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" name="dataset" value="meld" class="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary" checked>
+                                        <div>
+                                            <p class="text-sm font-semibold text-primary">MELD</p>
+                                            <p class="text-xs text-on-surface-variant">Multi-modal Emotion Lines Dataset</p>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" name="dataset" value="ravdess" class="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary">
+                                        <div>
+                                            <p class="text-sm font-semibold text-primary">RAVDESS</p>
+                                            <p class="text-xs text-on-surface-variant">Audio-Visual Database of Emotional Speech</p>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" name="dataset" value="tess" class="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary">
+                                        <div>
+                                            <p class="text-sm font-semibold text-primary">TESS</p>
+                                            <p class="text-xs text-on-surface-variant">Toronto Emotional Speech Set</p>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-primary transition-colors cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" name="dataset" value="emodb" class="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary">
+                                        <div>
+                                            <p class="text-sm font-semibold text-primary">EMO-DB</p>
+                                            <p class="text-xs text-on-surface-variant">Berlin Database of Emotional Speech</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    
+// Load persisted settings
+        function loadSettings() {
+            if (localStorage.getItem("epochs")) document.getElementById("hp-epochs").value = localStorage.getItem("epochs");
+            if (localStorage.getItem("batchSize")) document.getElementById("hp-batch").value = localStorage.getItem("batchSize");
+            if (localStorage.getItem("lr")) document.getElementById("hp-lr").value = localStorage.getItem("lr");
+            if (localStorage.getItem("modelType")) document.getElementById("modelSelect").value = localStorage.getItem("modelType");
+            
+            if (localStorage.getItem("datasets")) {
+                let savedDs = JSON.parse(localStorage.getItem("datasets"));
+                document.querySelectorAll("input[name='dataset']").forEach(cb => {
+                    cb.checked = savedDs.includes(cb.value);
+                });
+                updateDatasetsText();
+            }
+        }
+        
+                        function showMessage(msg, type) {
+            let color = type === 'success' ? 'bg-primary' : 'bg-red-600';
+            let icon = type === 'success' ? 'check_circle' : 'error';
+            
+            let toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 ${color} text-white px-5 py-4 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 z-50 font-medium`;
+            toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span><p class="text-sm">${msg}</p>`;
+            
+            document.body.appendChild(toast);
+            
+            // Trigger animation
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        function saveSettings() {
+            localStorage.setItem("epochs", document.getElementById("hp-epochs").value);
+            localStorage.setItem("batchSize", document.getElementById("hp-batch").value);
+            localStorage.setItem("lr", document.getElementById("hp-lr").value);
+            localStorage.setItem("modelType", document.getElementById("modelSelect").value);
+            
+            let checked = Array.from(document.querySelectorAll("input[name='dataset']:checked")).map(cb => cb.value);
+            localStorage.setItem("datasets", JSON.stringify(checked));
+            updateDatasetsText();
+        }
+        
+        function updateDatasetsText() {
+            let checked = Array.from(document.querySelectorAll("input[name='dataset']:checked")).map(cb => cb.value.toUpperCase());
+            document.getElementById("selectedDatasetsText").innerText = checked.length > 0 ? checked.join(", ") : "None";
+        }
+        
+        document.querySelectorAll("input, select").forEach(el => {
+            el.addEventListener("change", () => {
+                saveSettings();
+                if (el.id === "modelSelect") fetchModelArchitecture();
+            });
+        });
+
+        // Fetch Model Architecture
+        async function fetchModelArchitecture() {
+            let modelType = document.getElementById("modelSelect").value;
+            let res = await fetch(`/api/model-architecture?model=${modelType}`);
+            let data = await res.json();
+            
+            let tbody = document.querySelector(".overflow-x-auto tbody");
+            tbody.innerHTML = '';
+            
+            data.forEach(layer => {
+                tbody.innerHTML += `<tr class="border-b border-outline-variant/30 hover:bg-surface-container-highest/30 transition-colors">
+                    <td class="p-3 text-sm font-medium text-primary">${layer.layer}</td>
+                    <td class="p-3 text-sm text-on-surface-variant font-data-mono">${layer.output_shape}</td>
+                    <td class="p-3 text-sm text-on-surface-variant">${layer.param_count}</td>
+                    <td class="p-3 text-sm text-on-surface-variant">
+                        <span class="bg-surface-container px-2 py-1 rounded text-xs border border-outline-variant/50">${layer.activation}</span>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        // Fetch Training Status
+        async function fetchModelData() {
+            try {
+                let statRes = await fetch('/api/training-status');
+                let statData = await statRes.json();
+                
+                if (statData.epoch) {
+                    document.querySelector(".text-sm.mb-1 .text-on-surface-variant, .flex.justify-between.text-sm.mb-1 span.text-on-surface-variant").innerText = `Epoch ${statData.epoch} / ${statData.total_epochs}`;
+                    document.querySelector(".font-data-mono.text-lg.font-semibold.text-green-700").innerText = `${statData.val_accuracy}%`;
+                    document.querySelector(".font-data-mono.text-lg.font-semibold.text-primary").innerText = `${statData.val_loss}`;
+                    
+                    let chartSpace = document.querySelector(".h-24");
+                    if (chartSpace) {
+                        chartSpace.className = "flex items-end gap-1 mt-4 pt-4 border-t border-outline-variant/50 relative h-24 w-full bg-surface-container-low rounded-lg";
+                        if (statData.history) {
+                            chartSpace.innerHTML = '';
+                            let maxAcc = Math.max(...statData.history.val_acc);
+                            statData.history.val_acc.forEach((acc, i) => {
+                                let h = (acc / Math.max(maxAcc, 100)) * 100;
+                                chartSpace.innerHTML += `<div class="bg-primary hover:bg-primary/80 transition-all rounded-t-sm flex-1 relative group" style="height: ${h}%">
+                                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-1 rounded opacity-0 group-hover:opacity-100">${acc.toFixed(1)}%</div>
+                                </div>`;
+                            });
+                        } else {
+                            chartSpace.innerHTML = '<div class="w-full h-full flex flex-col items-center justify-center text-xs text-outline font-medium animate-pulse"><span class="material-symbols-outlined mb-1 text-primary animate-spin">sync</span> Extracting Audio Features (Takes ~10 mins)...</div>';
+                        }
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById('startTrainingBtn').addEventListener('click', async () => {
+            let btn = document.getElementById('startTrainingBtn');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Starting...';
+            btn.disabled = true;
+            
+            saveSettings();
+            let fd = new FormData();
+            fd.append("epochs", document.getElementById("hp-epochs").value);
+            fd.append("batch_size", document.getElementById("hp-batch").value);
+            fd.append("lr", document.getElementById("hp-lr").value);
+            fd.append("model_type", document.getElementById("modelSelect").value);
+            
+            document.querySelectorAll("input[name='dataset']:checked").forEach(cb => {
+                fd.append("datasets", cb.value);
+            });
+            
+            try {
+                let res = await fetch('/api/train', { method: 'POST', body: fd });
+                let data = await res.json();
+                showMessage(data.message, data.success ? 'success' : 'error');
+                fetchModelData();
+            } catch (e) {
+                showMessage("Failed to connect to backend", "error");
+            }
+            
+            btn.innerHTML = 'Start Training';
+            btn.disabled = false;
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadSettings();
+            fetchModelArchitecture();
+            fetchModelData();
+            setInterval(fetchModelData, 3000);
+        });
+    </script>
+</body>
+</html>

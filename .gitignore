@@ -1,0 +1,59 @@
+# Nested git backups (individual task repo git data)
+_git_bak/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Large binary/model files (too large for GitHub)
+*.npy
+*.npz
+*.pkl
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.onnx
+*.bin
+*.joblib
+
+# Data files (large CSVs/datasets)
+# Note: small CSVs kept; large ones excluded via size
+Task2_Emotion_Recognition_from_Speech/features.csv
+Task2_Emotion_Recognition_from_Speech/templates/features.csv
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
+
+# Env files
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dataset Management - Emotion AI Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#eae7e9",
+                      "outline-variant": "#c6c6cd",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary-fixed": "#191c1e",
+                      "inverse-primary": "#bec6e0",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary-fixed": "#d3e4fe",
+                      "surface-container-low": "#f6f3f5",
+                      "on-surface-variant": "#45464d",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-variant": "#e4e2e4",
+                      "surface-bright": "#fcf8fa",
+                      "surface-tint": "#565e74",
+                      "surface-container": "#f0edef",
+                      "primary-container": "#131b2e",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed": "#e0e3e5",
+                      "inverse-surface": "#303032",
+                      "outline": "#76777d",
+                      "on-tertiary-container": "#818486",
+                      "surface-dim": "#dcd9db",
+                      "background": "#fcf8fa",
+                      "on-primary-container": "#7c839b",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#dae2fd",
+                      "on-background": "#1b1b1d",
+                      "secondary-container": "#d0e1fb",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f3f0f2",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#131b2e",
+                      "secondary": "#505f76",
+                      "primary": "#000000",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#000000",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "tertiary-container": "#191c1e",
+                      "surface-container-highest": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "gutter": "1.5rem",
+                      "margin-mobile": "1rem",
+                      "unit-sm": "0.5rem",
+                      "margin-desktop": "2rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem",
+                      "unit-lg": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "data-mono": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["18px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+        .data-card { @apply bg-white border border-surface-container-high rounded-xl p-6 hover:shadow-[0_4px_6px_-1px_rgba(15,23,42,0.05)] transition-shadow duration-200; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        
+        /* Table Styles */
+        .dense-table th { @apply font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-left py-3 px-4 bg-surface-container-lowest border-b border-surface-container-high sticky top-0 z-10; }
+        .dense-table td { @apply py-2 px-4 border-b border-surface-container-high font-data-mono text-data-mono text-on-surface whitespace-nowrap; }
+        .dense-table tr:hover { @apply bg-surface-container-lowest/50; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex font-body-md overflow-hidden antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-6 px-4 bg-primary-container text-on-primary-container font-body-md fixed left-0 w-64 border-r border-outline-variant z-20">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface overflow-hidden flex items-center justify-center border border-outline-variant/30">
+<img alt="Research Lead Profile" class="object-cover w-full h-full" src="/profile.png" style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary m-0">Emotion AI Lab</h1>
+<p class="text-xs text-on-primary-container opacity-80 m-0">Masab Rehman - ML Engineer</p>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-container/90 transition-colors font-bold rounded-lg py-3 px-4 mb-8 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Experiment
+          </button>
+<div class="flex-1 flex flex-col gap-2">
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/signal-processor">
+<span class="material-symbols-outlined">equalizer</span>
+      Signal Processor
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/model-training">
+<span class="material-symbols-outlined">model_training</span>
+      Model Training
+    </a>
+<a class="text-on-primary-container opacity-80 hover:opacity-100 hover:bg-surface-variant/20 transition-colors rounded-lg flex items-center gap-3 px-4 py-3 active:scale-[0.98] duration-150" href="/inference-studio">
+<span class="material-symbols-outlined">mic</span>
+      Inference Studio
+    </a>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 active:scale-[0.98] transition-all duration-150" href="/dataset">
+<span class="material-symbols-outlined filled-icon">database</span>
+      Datasets
+    </a>
+</div>
+
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 bg-background h-screen overflow-y-auto overflow-x-hidden">
+<!-- TopAppBar -->
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-gutter relative">
+<!-- Page Header -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center space-x-2 mb-2">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Active Workspace</span>
+<span class="text-on-surface-variant text-sm flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1">folder</span>
+                            Data Repositories
+                        </span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Dataset Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-2xl">
+                        Overview of integrated speech corpora for emotion recognition tasks. Monitor distribution, file integrity, and metadata mappings for MFCC extraction.
+                    </p>
+</div>
+<div class="flex space-x-3">
+<button class="flex items-center space-x-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-sm font-medium hover:bg-surface-variant/20 transition-colors">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Sync Repos</span>
+</button>
+<button class="flex items-center space-x-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+<span>Ingest Data</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+<!-- Dataset Overview Card 1 -->
+<div class="col-span-1 md:col-span-4 data-card flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">RAVDESS</h3>
+<p class="text-xs text-on-surface-variant">Ryerson Audio-Visual Database</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-xs font-medium">Validated</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Total Files</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">7,356</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Actors</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">24</p>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-surface-container-high flex justify-between items-center">
+<span class="text-xs text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1 text-secondary">check_circle</span>
+                            MFCCs Extracted
+                        </span>
+<button class="text-sm text-primary font-medium hover:underline">Inspect →</button>
+</div>
+</div>
+<!-- Dataset Overview Card 2 -->
+<div class="col-span-1 md:col-span-4 data-card flex flex-col justify-between relative overflow-hidden group">
+<!-- Subtle pattern background -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">TESS</h3>
+<p class="text-xs text-on-surface-variant">Toronto Emotional Speech Set</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-xs font-medium">Validated</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Total Files</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">2,800</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Target</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">7 Emotions</p>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-surface-container-high flex justify-between items-center relative z-10">
+<span class="text-xs text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1 text-secondary">check_circle</span>
+                            MFCCs Extracted
+                        </span>
+<button class="text-sm text-primary font-medium hover:underline">Inspect →</button>
+</div>
+</div>
+<!-- Dataset Overview Card 3 -->
+<div class="col-span-1 md:col-span-4 data-card flex flex-col justify-between border-l-4 border-l-outline-variant">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">MELD</h3>
+<p class="text-xs text-on-surface-variant">Multi-modal Emotion Lines Dataset</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-xs font-medium">Validated</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Total Files</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">6,456</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Language</p>
+<p class="font-data-mono text-xl text-on-surface font-semibold">English</p>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-surface-container-high flex justify-between items-center">
+<span class="text-xs text-on-surface-variant flex items-center text-outline-variant">
+<span class="material-symbols-outlined text-[14px] mr-1 text-secondary">check_circle</span>
+                            MFCCs Extracted
+                        </span>
+<button class="text-sm text-primary font-medium hover:underline">Inspect →</button>
+</div>
+</div>
+<!-- Emotion Distribution Chart (Placeholder area) -->
+<div class="col-span-1 md:col-span-8 data-card h-80 flex flex-col">
+<div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Global Emotion Distribution</h3>
+<div class="flex space-x-2 shrink-0">
+<select class="text-xs border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant py-1 pl-2 pr-8 focus:ring-primary focus:border-primary appearance-none">
+<option>MELD Dataset</option>
+                                <option>RAVDESS</option>
+                                <option>TESS</option>
+                                <option>EMO-DB</option>
+</select>
+</div>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-lg border border-surface-container-high flex items-end justify-between p-4 pt-10 relative">
+<!-- Simulated Bar Chart -->
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[80%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">1240</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Neutral</span>
+</div>
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[60%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">980</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Calm</span>
+</div>
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[85%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">1350</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Happy</span>
+</div>
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[75%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">1100</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Sad</span>
+</div>
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[90%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">1420</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Angry</span>
+</div>
+<div class="flex flex-col items-center w-1/8 h-full justify-end z-10 group">
+<div class="w-12 bg-primary-container/80 rounded-t-sm h-[70%] group-hover:bg-primary transition-colors cursor-pointer relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">1050</div>
+</div>
+<span class="text-xs text-on-surface-variant mt-2 font-medium">Fearful</span>
+</div>
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none p-4 pb-8">
+<div class="w-full border-t border-surface-container-high"></div>
+<div class="w-full border-t border-surface-container-high"></div>
+<div class="w-full border-t border-surface-container-high"></div>
+<div class="w-full border-t border-surface-container-high"></div>
+<div class="w-full border-t border-surface-container-high"></div>
+</div>
+</div>
+</div>
+<!-- Feature Extraction Config -->
+<div class="col-span-1 md:col-span-4 data-card flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Extraction Config (MFCC)</h3>
+<div class="space-y-4 flex-1">
+<div class="flex justify-between items-center p-3 bg-surface-container-lowest border border-surface-container-high rounded-lg">
+<div>
+<p class="text-xs font-medium text-on-surface">Sample Rate</p>
+<p class="font-data-mono text-sm text-on-surface-variant">44,100 Hz</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[18px]">edit</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-surface-container-lowest border border-surface-container-high rounded-lg">
+<div>
+<p class="text-xs font-medium text-on-surface">N-MFCC</p>
+<p class="font-data-mono text-sm text-on-surface-variant">40</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[18px]">edit</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-surface-container-lowest border border-surface-container-high rounded-lg">
+<div>
+<p class="text-xs font-medium text-on-surface">Windowing</p>
+<p class="font-data-mono text-sm text-on-surface-variant">Hann / 2048 n_fft</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[18px]">edit</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-outline-variant text-on-surface text-sm font-medium rounded-lg hover:bg-surface-variant/20 transition-colors">
+                         Advanced Settings
+                     </button>
+</div>
+</div>
+<!-- Technical Data Table: Metadata Inspection -->
+<div class="data-card !p-0 overflow-hidden flex flex-col">
+<div class="p-4 border-b border-surface-container-high flex justify-between items-center bg-surface-container-lowest">
+<h3 class="font-headline-md text-headline-md text-on-surface">Data Point Inspection Log</h3>
+<div class="flex space-x-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-outline-variant">search</span>
+<input class="pl-9 pr-4 py-1.5 text-sm border-outline-variant rounded-md bg-white focus:ring-1 focus:ring-primary focus:border-primary w-64" placeholder="Search file ID..." type="text"/>
+</div>
+<button class="p-1.5 border border-outline-variant rounded-md hover:bg-surface-variant/20 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left dense-table">
+<thead>
+<tr>
+<th>File ID</th>
+<th>Dataset</th>
+<th>Target Emotion</th>
+<th>Duration</th>
+<th>Channels</th>
+<th>MFCC Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>03-01-05-01-02-01-01.wav</td>
+<td><span class="bg-surface-container-high px-2 py-0.5 rounded text-xs">RAVDESS</span></td>
+<td><span class="flex items-center"><div class="w-2 h-2 rounded-full bg-error mr-2"></div>Angry</span></td>
+<td>3.45s</td>
+<td>Mono (Avg)</td>
+<td><span class="text-secondary font-medium text-xs bg-secondary-container/50 px-2 py-0.5 rounded">Extracted</span></td>
+<td><button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_circle</span></button></td>
+</tr>
+<tr>
+<td>03-01-01-01-01-01-01.wav</td>
+<td><span class="bg-surface-container-high px-2 py-0.5 rounded text-xs">RAVDESS</span></td>
+<td><span class="flex items-center"><div class="w-2 h-2 rounded-full bg-surface-tint mr-2"></div>Neutral</span></td>
+<td>3.10s</td>
+<td>Mono (Avg)</td>
+<td><span class="text-secondary font-medium text-xs bg-secondary-container/50 px-2 py-0.5 rounded">Extracted</span></td>
+<td><button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_circle</span></button></td>
+</tr>
+<tr>
+<td>YAF_sad_01.wav</td>
+<td><span class="bg-surface-container-high px-2 py-0.5 rounded text-xs">TESS</span></td>
+<td><span class="flex items-center"><div class="w-2 h-2 rounded-full bg-primary-container mr-2"></div>Sad</span></td>
+<td>2.80s</td>
+<td>Mono</td>
+<td><span class="text-secondary font-medium text-xs bg-secondary-container/50 px-2 py-0.5 rounded">Extracted</span></td>
+<td><button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_circle</span></button></td>
+</tr>
+<tr>
+<td>16b03Wa.wav</td>
+<td><span class="bg-surface-container-high px-2 py-0.5 rounded text-xs">MELD</span></td>
+<td><span class="flex items-center"><div class="w-2 h-2 rounded-full bg-secondary-fixed mr-2"></div>Happy</span></td>
+<td>2.10s</td>
+<td>Mono</td>
+<td><span class="text-secondary font-medium text-xs bg-secondary-container/50 px-2 py-0.5 rounded">Extracted</span></td>
+<td><button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_circle</span></button></td>
+</tr>
+<tr>
+<td>03-01-03-02-01-02-02.wav</td>
+<td><span class="bg-surface-container-high px-2 py-0.5 rounded text-xs">RAVDESS</span></td>
+<td><span class="flex items-center"><div class="w-2 h-2 rounded-full bg-secondary-fixed mr-2"></div>Happy</span></td>
+<td>3.62s</td>
+<td>Mono (Avg)</td>
+<td><span class="text-secondary font-medium text-xs bg-secondary-container/50 px-2 py-0.5 rounded">Extracted</span></td>
+<td><button class="text-outline-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_circle</span></button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3 border-t border-surface-container-high bg-surface-container-lowest flex justify-between items-center text-xs text-on-surface-variant">
+<span>Showing 1-5 of 10,691 files</span>
+<div class="flex space-x-1">
+<button class="px-2 py-1 rounded hover:bg-surface-variant/20 disabled:opacity-50">Prev</button>
+<button class="px-2 py-1 rounded bg-surface-container-high font-medium">1</button>
+<button class="px-2 py-1 rounded hover:bg-surface-variant/20">2</button>
+<button class="px-2 py-1 rounded hover:bg-surface-variant/20">3</button>
+<span class="px-2 py-1">...</span>
+<button class="px-2 py-1 rounded hover:bg-surface-variant/20">Next</button>
+</div>
+</div>
+</div>
+<!-- Bottom spacing -->
+<div class="h-12"></div>
+</main>
+</div>
+<script>
+// Audio playback simulation for data points
+function simulateAudioPlayback(btn) {
+    const icon = btn.querySelector('span');
+    if(icon.innerText === 'play_circle') {
+        // Stop all others
+        document.querySelectorAll('.data-row-play span').forEach(el => {
+            el.innerText = 'play_circle';
+            el.closest('tr').classList.remove('bg-primary/10');
+        });
+        
+        icon.innerText = 'stop_circle';
+        btn.closest('tr').classList.add('bg-primary/10');
+        
+        // Auto stop after 2 seconds
+        setTimeout(() => {
+            if(icon.innerText === 'stop_circle') {
+                icon.innerText = 'play_circle';
+                btn.closest('tr').classList.remove('bg-primary/10');
+            }
+        }, 2000);
+    } else {
+        icon.innerText = 'play_circle';
+        btn.closest('tr').classList.remove('bg-primary/10');
+    }
+}
+
+    
+// Dynamic Dataset Logs
+let currentLogPage = 1;
+async function fetchLogs(page) {
+    try {
+        let res = await fetch(`/api/dataset-logs?page=${page}`);
+        let data = await res.json();
+        
+        let tbody = document.querySelector("tbody");
+        if(tbody && data.rows) {
+            tbody.innerHTML = '';
+            data.rows.forEach(r => {
+                let color = "bg-gray-400";
+                let t = r.target.toLowerCase();
+                if(t.includes('ang')) color = "bg-red-500";
+                else if(t.includes('hap') || t.includes('joy')) color = "bg-green-500";
+                else if(t.includes('sad')) color = "bg-blue-500";
+                else if(t.includes('fear')) color = "bg-purple-500";
+                else if(t.includes('disg')) color = "bg-orange-500";
+                else if(t.includes('surp')) color = "bg-yellow-500";
+                
+                tbody.innerHTML += `
+                <tr class="border-b border-surface-container hover:bg-surface-container-low transition-colors group">
+                    <td class="py-3 px-4 font-data-mono text-sm text-primary">${r.file_id}</td>
+                    <td class="py-3 px-4"><span class="bg-surface-container px-2 py-1 rounded text-xs font-medium">${r.dataset}</span></td>
+                    <td class="py-3 px-4 font-medium flex items-center gap-2"><div class="w-2 h-2 rounded-full ${color}"></div>${r.target}</td>
+                    <td class="py-3 px-4 text-on-surface-variant text-sm">${r.duration}</td>
+                    <td class="py-3 px-4 text-on-surface-variant text-sm">${r.channels}</td>
+                    <td class="py-3 px-4"><span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-medium">${r.status}</span></td>
+                    <td class="py-3 px-4"><button onclick="simulateAudioPlayback(this)" class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">play_circle</span></button></td>
+                </tr>`;
+            });
+            
+            document.querySelector(".p-3.border-t span").innerText = `Showing ${((page-1)*5)+1}-${Math.min(page*5, data.total)} of ${data.total} files`;
+            document.querySelector(".p-3.border-t span");
+        }
+    } catch(e) {}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Inspect buttons scroll down
+    document.querySelectorAll('button').forEach(b => {
+        if(b.innerText.includes("Inspect")) {
+            b.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.data-card.\!p-0').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    });
+
+    fetchLogs(currentLogPage);
+    
+    // pagination clicks
+    let pagers = document.querySelectorAll(".flex.space-x-1 button");
+    if(pagers.length > 0) {
+        pagers.forEach(b => {
+            b.addEventListener('click', () => {
+                let txt = b.innerText.trim();
+                if (txt === 'Prev') { if(currentLogPage > 1) currentLogPage--; }
+                else if (txt === 'Next') { currentLogPage++; }
+                else if (parseInt(txt)) { currentLogPage = parseInt(txt); }
+                
+                // Update active state of buttons
+                pagers.forEach(btn => {
+                    if (parseInt(btn.innerText)) {
+                        if (parseInt(btn.innerText) === currentLogPage) {
+                            btn.className = "px-2 py-1 rounded bg-surface-container-high font-medium";
+                        } else {
+                            btn.className = "px-2 py-1 rounded hover:bg-surface-variant/20";
+                        }
+                    }
+                });
+                
+                fetchLogs(currentLogPage);
+            });
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Inspect buttons scroll down
+    document.querySelectorAll('button').forEach(b => {
+        if(b.innerText.includes("Inspect")) {
+            b.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.data-card.\!p-0').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    });
+
+        
+const showMessage = (msg) => {
+    let toast = document.createElement("div");
+    toast.className = "fixed bottom-4 right-4 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 opacity-0";
+    toast.style.backgroundColor = "#313033"; // Material 3 inverse surface
+    toast.style.color = "#f4eff4";
+    toast.innerText = msg;
+    document.body.appendChild(toast);
+    
+    // Fade in
+    setTimeout(() => { toast.classList.remove("opacity-0"); }, 10);
+    
+    // Fade out and remove
+    setTimeout(() => {
+        toast.classList.add("opacity-0");
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};
+
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(b => {
+            const t = b.innerText;
+            if (t.includes("Sync Repos")) {
+    b.addEventListener('click', async () => {
+        let orig = b.innerHTML;
+        b.innerHTML = `<span class="material-symbols-outlined animate-spin">sync</span> Syncing...`;
+        let res = await fetch('/api/sync', {method:'POST'});
+        let data = await res.json();
+        b.innerHTML = `<span class="material-symbols-outlined">check</span> Synced`;
+        setTimeout(() => b.innerHTML = orig, 2000);
+    });
+}
+            if (t.includes("Ingest Data")) {
+    b.addEventListener('click', async () => {
+        let orig = b.innerHTML;
+        b.innerHTML = `<span class="material-symbols-outlined animate-spin">sync</span> Ingesting...`;
+        let res = await fetch('/api/ingest', {method:'POST'});
+        let data = await res.json();
+        showMessage(data.message);
+        b.innerHTML = orig;
+    });
+}
+            if (t.includes("Advanced Settings")) b.addEventListener("click", () => document.getElementById("advanced-settings-modal"));
+        });
+          // Hook up play buttons in table
+          document.querySelectorAll("td button").forEach(b => {
+              b.classList.add("data-row-play");
+              b.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  simulateAudioPlayback(b);
+              });
+          });
+    });
+    </script>
+<!-- Advanced Settings Modal -->
+<div class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm" id="advanced-settings-modal">
+<div class="bg-surface-container-lowest rounded-xl p-6 w-96 shadow-lg border border-outline-variant">
+<h3 class="font-headline-md text-headline-md mb-4 text-on-surface">Advanced Pipeline Settings</h3>
+<div class="space-y-4">
+<label class="flex items-center justify-between text-sm text-on-surface-variant">
+                Enable Data Augmentation
+                <input checked="" class="rounded text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between text-sm text-on-surface-variant">
+                Noise Injection Level
+                <input class="w-32 h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="100" min="0" type="range" value="15"/>
+</label>
+<label class="flex items-center justify-between text-sm text-on-surface-variant">
+                Pitch Shift Factor
+                <input class="w-32 h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="5" min="-5" type="range" value="2"/>
+</label>
+</div>
+<div class="mt-6 flex justify-end gap-2">
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-variant/20 rounded" onclick="document.getElementById('advanced-settings-modal').classList.add('hidden')">Cancel</button>
+<button class="px-4 py-2 text-sm font-medium bg-primary text-on-primary rounded shadow" onclick="document.getElementById('advanced-settings-modal').classList.add('hidden')">Save Settings</button>
+</div>
+</div>
+</div>
+</body></html>
