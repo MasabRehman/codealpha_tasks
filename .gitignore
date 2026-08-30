@@ -18,22 +18,8 @@ build/
 # Jupyter
 .ipynb_checkpoints/
 
-# Large binary/model files (too large for GitHub)
-*.npy
-*.npz
-*.pkl
-*.h5
-*.hdf5
-*.pt
-*.pth
-*.onnx
-*.bin
-*.joblib
-
-# Data files (large CSVs/datasets)
-# Note: small CSVs kept; large ones excluded via size
-Task2_Emotion_Recognition_from_Speech/features.csv
-Task2_Emotion_Recognition_from_Speech/templates/features.csv
+# Note: Large binary/model files (*.npy, *.pkl, *.pth, *.joblib)
+# are tracked via Git LFS — do NOT exclude them here
 
 # OS
 .DS_Store

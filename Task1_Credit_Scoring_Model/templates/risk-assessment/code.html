@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Customer Risk Assessment Portal - CreditMetrics AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000000",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#eae7e9",
+                      "background": "#fcf8fa",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface-container": "#f0edef",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-container-low": "#f6f3f5",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-error-container": "#93000a",
+                      "primary": "#000000",
+                      "inverse-surface": "#303032",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d3e4fe",
+                      "outline": "#76777d",
+                      "secondary-container": "#d0e1fb",
+                      "on-background": "#1b1b1d",
+                      "surface-dim": "#dcd9db",
+                      "surface-tint": "#565e74",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-bright": "#fcf8fa",
+                      "primary-container": "#131b2e",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary": "#505f76",
+                      "tertiary-container": "#191c1e",
+                      "on-secondary-fixed": "#0b1c30",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-tertiary-container": "#818486",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#7c839b",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-surface-variant": "#45464d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#54647a",
+                      "inverse-primary": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "1rem",
+                      "unit-lg": "1.5rem",
+                      "gutter": "1.5rem",
+                      "margin-desktop": "2rem",
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "unit-sm": "0.5rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Scrollbar for Input Panel */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dcd9db; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #c6c6cd; 
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen overflow-x-hidden font-body-md">
+<!-- TopNavBar -->
+
+<div class="flex h-screen">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 bg-surface dark:bg-surface-dim border-r border-outline-variant dark:border-outline z-40 py-unit-lg justify-between">
+<div>
+<div class="px-unit-lg mb-unit-lg mt-unit-xs">
+    <div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary tracking-tight">
+        CreditMetrics AI
+    </div>
+</div>
+<div class="px-unit-lg mb-unit-lg flex items-center gap-unit-sm">
+<div class="w-8 h-8 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img src="/profile.png" alt="User Logo" class="w-full h-full object-cover" / style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);">
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-medium text-primary">Masab Rehman</div>
+<div class="font-label-md text-label-md text-on-surface-variant">Data Scientist / ML Engineer</div>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-unit-xs px-unit-md">
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/model-dashboard">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                            Model Dashboard
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-lg px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all opacity-80 scale-[0.98]" href="/risk-assessment">
+<span class="material-symbols-outlined text-[18px]">assessment</span>
+                            Risk Assessment
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/data-pipeline">
+<span class="material-symbols-outlined text-[18px]">database</span>
+                            Data Pipeline
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/audit-logs">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                            Audit Logs
+                        </a>
+</li>
+</ul>
+</div>
+<div class="px-unit-md pb-unit-md">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-2 rounded-lg mb-unit-md hover:opacity-90 transition-opacity">
+                    Export Report
+                </button>
+
+</div>
+</nav>
+
+<main class="ml-64 pt-20 px-gutter pb-gutter min-h-screen">
+<!-- Page Header -->
+<div class="mb-gutter flex justify-between items-end">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Customer Risk Assessment</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Real-time credit evaluation and feature impact analysis.</p>
+</div>
+<div class="relative inline-block">
+    <select id="model-select" class="appearance-none w-full cursor-pointer text-sm font-data-mono text-primary font-semibold bg-surface-container-lowest border-2 border-primary/20 hover:border-primary/50 pl-4 pr-10 py-2 rounded-lg shadow-sm outline-none focus:border-primary transition-all">
+        <option value="Logistic Regression">Logistic Regression</option>
+        <option value="Decision Tree">Decision Tree</option>
+        <option value="Random Forest">Random Forest</option>
+    </select>
+    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
+        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+    </div>
+</div>
+</div>
+<!-- 2-Column Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- LEFT PANEL: Streamlit-inspired Input Form -->
+<div class="lg:col-span-4 xl:col-span-3 bg-surface-container border border-outline-variant rounded-xl shadow-sm flex flex-col h-[calc(100vh-140px)] sticky top-[88px]">
+<div class="px-unit-lg py-4 border-b border-outline-variant bg-surface-container-lowest rounded-t-xl flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">tune</span> Parameters
+                    </h2>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+</div>
+<div class="p-unit-lg overflow-y-auto custom-scrollbar flex-1 flex flex-col gap-5">
+<!-- Input Group -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Annual Income (USD)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-data-mono">$</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-md py-2 pl-7 pr-3 font-data-mono text-data-mono text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors shadow-sm" type="number" value="85000"/>
+</div>
+</div>
+<!-- Input Group -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5">Total Debt (USD)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-data-mono">$</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-md py-2 pl-7 pr-3 font-data-mono text-data-mono text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors shadow-sm" type="number" value="24500"/>
+</div>
+</div>
+<!-- Input Group -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5 flex justify-between">
+                            Loan Amount (USD)
+                            <span class="text-on-surface-variant font-normal">Requested</span>
+</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-data-mono">$</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-md py-2 pl-7 pr-3 font-data-mono text-data-mono text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors shadow-sm" type="number" value="15000"/>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant opacity-50 my-1"></div>
+<!-- Input Group -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5 flex justify-between">
+                            Credit Utilization
+                            <span id="util-display" class="text-on-surface-variant font-data-mono text-[11px]">32%</span>
+</label>
+<input id="util-slider" class="w-full h-1.5 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="32"/>
+</div>
+<!-- Input Group -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5 flex justify-between">
+                            Payment Delinquencies
+                            <span class="text-on-surface-variant font-normal">Past 24mo</span>
+</label>
+<div class="flex items-center gap-2">
+<input class="w-20 bg-surface-container-lowest border border-outline-variant rounded-md py-2 px-3 font-data-mono text-data-mono text-primary text-center focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors shadow-sm" max="24" min="0" type="number" value="1"/>
+<span class="font-body-md text-body-md text-on-surface-variant">incidents</span>
+</div>
+</div>
+<!-- Readonly / Calculated display -->
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant flex justify-between items-center mt-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Debt-to-Income (DTI)</span>
+<span class="font-data-mono text-data-mono font-semibold text-primary">28.8%</span>
+</div>
+</div>
+<div class="p-unit-lg border-t border-outline-variant bg-surface-container-lowest rounded-b-xl">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg hover:bg-inverse-surface transition-colors shadow flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span> Run Assessment Model
+                    </button>
+</div>
+</div>
+<!-- RIGHT PANEL: Results & Visualization -->
+<div class="lg:col-span-8 xl:col-span-9 flex flex-col gap-gutter">
+<!-- Top Metrics Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Credit Score Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<!-- Decorative bg -->
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-secondary-container rounded-full opacity-50 blur-xl group-hover:bg-primary-fixed transition-colors"></div>
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">speed</span> Calculated Score
+                            </div>
+<div class="flex items-baseline gap-3">
+<span id="score-value" class="font-headline-xl text-[48px] leading-none font-bold text-primary">742</span>
+<span class="font-data-mono text-data-mono text-secondary flex items-center bg-secondary-container px-1.5 py-0.5 rounded text-xs">
+                                    +12 <span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between text-xs font-label-md text-on-surface-variant">
+<span>Range: 300 - 850</span>
+<span class="text-primary font-medium">Good Standing</span>
+</div>
+</div>
+<!-- Risk Tier Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">shield</span> Risk Tier
+                            </div>
+<div class="mt-4">
+<!-- High contrast functional badge -->
+<span class="inline-flex items-center gap-2 bg-[#dcfce7] text-[#166534] border border-[#bbf7d0] px-4 py-2 rounded-full font-headline-md text-headline-md shadow-sm">
+<span class="material-symbols-outlined icon-fill text-[20px]">check_circle</span>
+                                    <span id="tier-value">Low Risk</span>
+                                </span>
+</div>
+</div>
+<div class="mt-6 font-body-md text-body-md text-on-surface-variant leading-tight">
+                            Profile indicates strong repayment capacity based on historical markers.
+                        </div>
+</div>
+<!-- Default Probability Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">warning</span> Default Probability
+                            </div>
+<div class="flex items-baseline gap-2 mt-2">
+<span id="prob-value" class="font-headline-xl text-[36px] leading-none font-bold text-primary">4.2</span>
+<span class="font-headline-md text-headline-md text-on-surface-variant">%</span>
+</div>
+</div>
+<div class="mt-6">
+<div class="w-full bg-surface-container-high rounded-full h-2.5 mb-1 overflow-hidden">
+<!-- Progress bar filling up to 4.2% out of say 20% max threshold -->
+<div class="bg-primary h-2.5 rounded-full" style="width: 21%"></div>
+</div>
+<div class="flex justify-between text-xs font-label-md text-on-surface-variant">
+<span>0%</span>
+<span class="text-error font-medium">Threshold: 15%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Waterfall Chart Area (Feature Contribution) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex-1 flex flex-col">
+<div class="px-unit-lg py-4 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Feature Contribution Analysis</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">SHAP value breakdown driving the final score.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface-variant">
+<span class="w-3 h-3 rounded bg-secondary-container border border-secondary block"></span> Positive
+                            </div>
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface-variant">
+<span class="w-3 h-3 rounded bg-error-container border border-error block"></span> Negative
+                            </div>
+</div>
+</div>
+<div class="p-unit-lg flex-1 relative min-h-[350px]">
+<!-- Y-Axis Line -->
+<div class="absolute left-[140px] top-6 bottom-8 w-px bg-outline-variant border-r border-dashed"></div>
+<!-- Chart Container - CSS Grid simulation of waterfall -->
+<div class="w-full h-full flex flex-col justify-between font-data-mono text-data-mono relative z-10 pt-4 pb-2">
+<!-- Row: Base Score -->
+<div class="flex items-center w-full group">
+<div class="w-[130px] text-right pr-4 text-on-surface font-semibold">Base Model</div>
+<div class="flex-1 relative h-8 flex items-center">
+<!-- Bar spanning 0 to say 650 -->
+<div class="absolute left-0 h-6 bg-surface-variant border border-outline rounded flex items-center justify-end pr-2 text-xs text-on-surface shadow-sm transition-all group-hover:brightness-95" style="width: 65%;">
+                                        650
+                                    </div>
+</div>
+</div>
+<!-- Row: Income (+) -->
+<div class="flex items-center w-full group">
+<div class="w-[130px] text-right pr-4 text-on-surface-variant">Annual Income</div>
+<div class="flex-1 relative h-8 flex items-center">
+<div id="shap-income" class="absolute h-6 bg-secondary-container border border-secondary rounded flex items-center justify-center text-xs text-on-secondary-container shadow-sm transition-all group-hover:brightness-95" style="left: 65%; width: 12%;">
+                                        +58
+                                    </div>
+</div>
+</div>
+<!-- Row: Payment History (-) -->
+<div class="flex items-center w-full group">
+<div class="w-[130px] text-right pr-4 text-on-surface-variant">Delinquencies</div>
+<div class="flex-1 relative h-8 flex items-center">
+<div id="shap-delinq" class="absolute h-6 bg-error-container border border-error rounded flex items-center justify-center text-xs text-on-error-container shadow-sm transition-all group-hover:brightness-95" style="left: 72%; width: 5%;">
+                                        -24
+                                    </div>
+<!-- Connecting line visualization hint (optional, skipped for flat look) -->
+</div>
+</div>
+<!-- Row: Credit Util (+) -->
+<div class="flex items-center w-full group">
+<div class="w-[130px] text-right pr-4 text-on-surface-variant">Credit Util %</div>
+<div class="flex-1 relative h-8 flex items-center">
+<div id="shap-util" class="absolute h-6 bg-secondary-container border border-secondary rounded flex items-center justify-center text-xs text-on-secondary-container shadow-sm transition-all group-hover:brightness-95" style="left: 72%; width: 6%;">
+                                        +29
+                                    </div>
+</div>
+</div>
+<!-- Row: DTI (+) -->
+<div class="flex items-center w-full group">
+<div class="w-[130px] text-right pr-4 text-on-surface-variant">DTI Ratio</div>
+<div class="flex-1 relative h-8 flex items-center">
+<div id="shap-dti" class="absolute h-6 bg-secondary-container border border-secondary rounded flex items-center justify-center text-xs text-on-secondary-container shadow-sm transition-all group-hover:brightness-95" style="left: 78%; width: 5%;">
+                                        +29
+                                    </div>
+</div>
+</div>
+<!-- Divider before final -->
+<div class="w-full h-px bg-outline-variant my-2 border-b border-dashed"></div>
+<!-- Row: Final Score -->
+<div class="flex items-center w-full group mt-2">
+<div class="w-[130px] text-right pr-4 text-primary font-bold">Final Score</div>
+<div class="flex-1 relative h-8 flex items-center">
+<!-- Solid bar from 0 to final -->
+<div id="final-score-bar" class="absolute left-0 h-6 bg-primary rounded flex items-center justify-end pr-3 text-xs text-on-primary font-bold shadow-md transition-all group-hover:brightness-110" style="width: 83%;">
+                                        742
+                                    </div>
+</div>
+</div>
+</div>
+<!-- X-Axis Labels (Rough approximation for layout) -->
+<div class="absolute bottom-2 left-[140px] right-0 flex justify-between font-label-md text-[10px] text-on-surface-variant px-1 border-t border-outline-variant pt-2">
+<span>0</span>
+<span>200</span>
+<span>400</span>
+<span>600</span>
+<span>800</span>
+<span>850</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // --- UNIVERSAL LOCALSTORAGE STATE PERSISTENCE ---
+    const pageKey = window.location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home';
+    document.querySelectorAll("input, select, textarea").forEach((el, index) => {
+        if (!el.id) el.id = `auto-id-${pageKey}-${index}`;
+        const savedVal = localStorage.getItem(el.id);
+        if (savedVal !== null) {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = (savedVal === 'true');
+            } else {
+                el.value = savedVal;
+            }
+        }
+        el.addEventListener("change", () => {
+            const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+            localStorage.setItem(el.id, val);
+        });
+        el.addEventListener("input", () => {
+            const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+            localStorage.setItem(el.id, val);
+        });
+    });
+
+    // --- TOAST NOTIFICATIONS ---
+    const showMessage = (msg) => {
+        let toast = document.createElement("div");
+        toast.className = "fixed bottom-6 right-6 bg-primary text-white px-5 py-4 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 z-50 font-medium max-w-sm";
+        toast.innerHTML = '<span class="material-symbols-outlined">info</span><p class="text-sm whitespace-pre-line">' + msg + '</p>';
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => { toast.classList.remove('translate-y-10', 'opacity-0'); });
+        setTimeout(() => {
+            toast.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
+
+    // --- CREDIT UTILIZATION SLIDER BINDING ---
+    let slider = document.getElementById('util-slider');
+    let disp = document.getElementById('util-display');
+    if (slider && disp) {
+        slider.addEventListener('input', () => {
+            disp.innerText = slider.value + '%';
+        });
+        disp.innerText = slider.value + '%';
+    }
+
+    // --- RUN ASSESSMENT MODEL BUTTON ---
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+            let btnText = btn.innerText.trim();
+            if (!btnText.includes("Run Assessment Model")) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+            btn.innerText = "Evaluating Profile...";
+
+            try {
+                // Gather all number/range inputs by their IDs
+                let incomeEl = document.querySelector('input[type="number"]');
+                let allNumberInputs = document.querySelectorAll('input[type="number"]');
+                let rangeInput = document.getElementById('util-slider');
+
+                let income = allNumberInputs[0] ? allNumberInputs[0].value : 85000;
+                let debt = allNumberInputs[1] ? allNumberInputs[1].value : 24500;
+                let loan = allNumberInputs[2] ? allNumberInputs[2].value : 15000;
+                let util = rangeInput ? rangeInput.value : 32;
+                let delinquencies = allNumberInputs[3] ? allNumberInputs[3].value : 1;
+
+                let modelType = document.getElementById('model-select') ? document.getElementById('model-select').value : 'Logistic Regression';
+
+                let payload = {
+                    income: income,
+                    debt: debt,
+                    loan: loan,
+                    utilization: util,
+                    delinquencies: delinquencies,
+                    model: modelType
+                };
+
+                let res = await fetch("/api/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                let data = await res.json();
+
+                if (data.success) {
+                    showMessage("Assessment Complete! Score: " + data.score + " | Risk: " + data.tier);
+
+                    // --- UPDATE CALCULATED SCORE ---
+                    let scoreEl = document.getElementById("score-value");
+                    if (scoreEl) scoreEl.innerText = data.score;
+
+                    // --- UPDATE DEFAULT PROBABILITY ---
+                    let probEl = document.getElementById("prob-value");
+                    if (probEl) probEl.innerText = data.prob;
+
+                    // --- UPDATE RISK TIER ---
+                    let tierEl = document.getElementById("tier-value");
+                    if (tierEl) {
+                        tierEl.innerText = data.tier;
+                        let parent = tierEl.parentElement;
+                        let iconEl = parent ? parent.querySelector('.material-symbols-outlined') : null;
+                        if (data.tier.includes('Severe') || data.tier.includes('High')) {
+                            if (parent) parent.className = "bg-[#ef4444]/20 text-[#ef4444] px-3 py-1 rounded-md font-label-md flex items-center gap-1 w-fit";
+                            if (iconEl) iconEl.innerText = 'warning';
+                        } else if (data.tier.includes('Medium') || data.tier.includes('Moderate')) {
+                            if (parent) parent.className = "bg-[#f59e0b]/20 text-[#f59e0b] px-3 py-1 rounded-md font-label-md flex items-center gap-1 w-fit";
+                            if (iconEl) iconEl.innerText = 'error';
+                        } else {
+                            if (parent) parent.className = "bg-[#10b981]/20 text-[#10b981] px-3 py-1 rounded-md font-label-md flex items-center gap-1 w-fit";
+                            if (iconEl) iconEl.innerText = 'check_circle';
+                        }
+                    }
+
+                    // --- UPDATE FEATURE CONTRIBUTION ANALYSIS ---
+                    let finalScoreBar = document.getElementById("final-score-bar");
+                    if (finalScoreBar) {
+                        finalScoreBar.innerText = data.score;
+                        finalScoreBar.style.width = Math.min(100, (data.score / 850) * 100) + '%';
+                    }
+
+                    // Update the standing text
+                    let standingEls = document.querySelectorAll('.text-primary.font-medium');
+                    standingEls.forEach(el => {
+                        if (data.score >= 700) el.innerText = 'Good Standing';
+                        else if (data.score >= 600) el.innerText = 'Fair Standing';
+                        else el.innerText = 'Poor Standing';
+                    });
+
+                    // Update the probability bar
+                    let probBar = document.querySelector('.bg-primary.h-2');
+                    if (probBar) {
+                        probBar.style.width = Math.min(100, data.prob) + '%';
+                    }
+
+                    // --- UPDATE SHAP WATERFALL CHART ---
+                    if (data.shap) {
+                        let s = data.shap;
+                        let baseW = (s.base / 850) * 100;
+
+                        function updateShapBar(id, val, startPct) {
+                            let el = document.getElementById(id);
+                            if (!el) return startPct;
+                            let w = Math.abs(val) / 850 * 100;
+                            w = Math.max(w, 2); // minimum visible width
+                            let isNeg = val < 0;
+                            let left = isNeg ? startPct - w : startPct;
+                            el.style.left = Math.max(0, left) + '%';
+                            el.style.width = w + '%';
+                            el.innerText = (val >= 0 ? '+' : '') + val;
+                            // Swap color classes
+                            if (isNeg) {
+                                el.className = el.className.replace(/bg-secondary-container/g, 'bg-error-container').replace(/border-secondary/g, 'border-error').replace(/text-on-secondary-container/g, 'text-on-error-container');
+                            } else {
+                                el.className = el.className.replace(/bg-error-container/g, 'bg-secondary-container').replace(/border-error/g, 'border-secondary').replace(/text-on-error-container/g, 'text-on-secondary-container');
+                            }
+                            return isNeg ? startPct - w : startPct + w;
+                        }
+
+                        let cursor = baseW;
+                        cursor = updateShapBar('shap-income', s.income, cursor);
+                        cursor = updateShapBar('shap-delinq', s.delinq, cursor);
+                        cursor = updateShapBar('shap-util', s.util, cursor);
+                        cursor = updateShapBar('shap-dti', s.dti, cursor);
+                    }
+
+                } else {
+                    showMessage("Error: " + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                showMessage("Error connecting to ML engine: " + err.message);
+            }
+            btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">play_arrow</span> Run Assessment Model';
+        });
+    });
+});
+</script>
+</body></html>

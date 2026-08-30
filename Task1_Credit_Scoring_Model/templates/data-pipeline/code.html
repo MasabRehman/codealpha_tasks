@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data Pipeline - CreditMetrics AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#000000",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#eae7e9",
+                      "background": "#fcf8fa",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface-container": "#f0edef",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-container-low": "#f6f3f5",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-error-container": "#93000a",
+                      "primary": "#000000",
+                      "inverse-surface": "#303032",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#d3e4fe",
+                      "outline": "#76777d",
+                      "secondary-container": "#d0e1fb",
+                      "on-background": "#1b1b1d",
+                      "surface-dim": "#dcd9db",
+                      "surface-tint": "#565e74",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-bright": "#fcf8fa",
+                      "primary-container": "#131b2e",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1b1b1d",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary": "#505f76",
+                      "tertiary-container": "#191c1e",
+                      "on-secondary-fixed": "#0b1c30",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "on-tertiary-container": "#818486",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#7c839b",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-surface-variant": "#45464d",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#54647a",
+                      "inverse-primary": "#bec6e0",
+                      "surface": "#fcf8fa",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e4e2e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "1rem",
+                      "unit-lg": "1.5rem",
+                      "gutter": "1.5rem",
+                      "margin-desktop": "2rem",
+                      "container-max": "1280px",
+                      "unit-md": "1rem",
+                      "unit-sm": "0.5rem",
+                      "unit-xl": "2rem",
+                      "unit-xs": "0.25rem"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar -->
+
+<div class="flex h-screen">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 bg-surface dark:bg-surface-dim border-r border-outline-variant dark:border-outline z-40 py-unit-lg justify-between">
+<div>
+<div class="px-unit-lg mb-unit-lg mt-unit-xs">
+    <div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary tracking-tight">
+        CreditMetrics AI
+    </div>
+</div>
+<div class="px-unit-lg mb-unit-lg flex items-center gap-unit-sm">
+<div class="w-8 h-8 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<img src="/profile.png" alt="User Logo" class="w-full h-full object-cover" / style="cursor:zoom-in;" onclick="const overlay = document.createElement('div'); overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:99999;cursor:zoom-out;backdrop-filter:blur(4px);'; overlay.onclick = () => overlay.remove(); const img = document.createElement('img'); img.src = this.src; img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.5);'; overlay.appendChild(img); document.body.appendChild(overlay);">
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-medium text-primary">Masab Rehman</div>
+<div class="font-label-md text-label-md text-on-surface-variant">Data Scientist / ML Engineer</div>
+<div class="flex gap-3 mt-2">
+    <a href="http://linkedin.com/in/masab-rehman-a436b0297" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    </a>
+    <a href="https://github.com/MasabRehman" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="GitHub">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    </a>
+    <a href="https://personal-portfolio-lime-eight-20.vercel.app/" target="_blank" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center" title="Portfolio">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </a>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-unit-xs px-unit-md">
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/model-dashboard">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+                            Model Dashboard
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/risk-assessment">
+<span class="material-symbols-outlined text-[18px]">assessment</span>
+                            Risk Assessment
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-lg px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all opacity-80 scale-[0.98]" href="/data-pipeline">
+<span class="material-symbols-outlined text-[18px]">database</span>
+                            Data Pipeline
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-unit-md text-on-surface-variant dark:text-on-tertiary-container px-unit-md py-unit-sm font-label-md text-label-md hover:bg-surface-container-high transition-all rounded-lg" href="/audit-logs">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                            Audit Logs
+                        </a>
+</li>
+</ul>
+</div>
+<div class="px-unit-md pb-unit-md">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-2 rounded-lg mb-unit-md hover:opacity-90 transition-opacity">
+                    Export Report
+                </button>
+
+</div>
+</nav>
+
+<main class="flex-1 md:ml-64 pt-16 md:pt-0 min-h-screen bg-background">
+<div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto space-y-gutter">
+
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-unit-lg">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Data Pipeline</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Configure and execute feature engineering transformations.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative inline-block">
+    <select id="model-select" class="appearance-none w-full cursor-pointer text-sm font-data-mono text-primary font-semibold bg-surface-container-lowest border-2 border-primary/20 hover:border-primary/50 pl-4 pr-10 py-2 rounded-lg shadow-sm outline-none focus:border-primary transition-all">
+        <option value="Logistic Regression">Logistic Regression</option>
+        <option value="Decision Tree">Decision Tree</option>
+        <option value="Random Forest">Random Forest</option>
+    </select>
+    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
+        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+    </div>
+</div>
+<button id="run-pipeline-btn" class="bg-primary text-on-primary font-label-md text-label-md px-4 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span> Run Pipeline
+</button>
+</div>
+</div>
+<!-- Pipeline Stages (Bento Grid Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Stage 1: Imputation -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-unit-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#3b82f6]"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined">healing</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Step 1</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Missing Value Imputation</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 h-12">Applying median imputation strategy for numeric columns to preserve data distribution robustness.</p>
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+<div class="flex justify-between text-label-md font-label-md mb-1">
+<span class="text-on-surface-variant">Strategy:</span>
+<span class="text-primary font-mono">Median</span>
+</div>
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface-variant">Affected Cols:</span>
+<span class="text-primary font-mono">4</span>
+</div>
+</div>
+</div>
+<!-- Stage 2: Scaling -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-unit-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#10b981]"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined">compress</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Step 2</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Robust Scaling</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 h-12">Scaling features using statistics that are robust to outliers (Interquartile Range).</p>
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+<div class="flex justify-between text-label-md font-label-md mb-1">
+<span class="text-on-surface-variant">Method:</span>
+<span class="text-primary font-mono">RobustScaler</span>
+</div>
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface-variant">Outlier Handling:</span>
+<span class="text-[#10b981] font-mono">Active</span>
+</div>
+</div>
+</div>
+<!-- Stage 3: SMOTE -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-unit-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#8b5cf6]"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined">balance</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Step 3</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">SMOTE Balancing</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 h-12">Synthetic Minority Over-sampling Technique to address default vs. non-default class imbalance.</p>
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+<div class="flex justify-between text-label-md font-label-md mb-1">
+<span class="text-on-surface-variant">Target Col:</span>
+<span class="text-primary font-mono">Default_Status</span>
+</div>
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface-variant">Ratio (Post):</span>
+<span class="text-primary font-mono">1:1</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Data Grid Preview -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="p-unit-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">table_view</span>
+                        Dataset Preview: Post-Transformation
+                    </h2>
+<div class="flex gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="pl-9 pr-4 py-1.5 text-body-md font-body-md border border-outline-variant rounded-md bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64" placeholder="Search columns..." type="text"/>
+</div>
+<button aria-label="Filter" class="p-1.5 border border-outline-variant rounded-md hover:bg-surface-container bg-white text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left whitespace-nowrap min-w-[800px]">
+<thead class="bg-[#f1f5f9] font-label-md text-label-md text-on-surface-variant uppercase tracking-wider sticky top-0">
+<tr>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">ID</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">Income (Scaled)</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">Total Debt</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">PTI Ratio</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">DTI Ratio</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant">Credit Util</th>
+<th class="px-4 py-3 font-medium border-b border-outline-variant text-center">Status</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-data-mono divide-y divide-outline-variant/50 bg-white">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-2.5 text-on-surface-variant">APP-0921</td>
+<td class="px-4 py-2.5 text-on-surface text-right">0.842</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$45,200</td>
+<td class="px-4 py-2.5 text-on-surface text-right">12.4%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">38.2%</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-[#10b981]">22%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">Current</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-2.5 text-on-surface-variant">APP-0922</td>
+<td class="px-4 py-2.5 text-on-surface text-right">-1.104</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$82,500</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-error font-semibold">45.1%</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-error font-semibold">52.8%</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-error font-semibold">89%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-error-container text-on-error-container border border-[#fecaca]">Default</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group bg-secondary-container/20 relative">
+<td class="px-4 py-2.5 text-on-surface-variant relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#8b5cf6] hidden group-hover:block"></div>
+<span class="flex items-center gap-1">SYN-1001 <span class="material-symbols-outlined text-[14px] text-[#8b5cf6]" title="Synthetic SMOTE Row">auto_awesome</span></span>
+</td>
+<td class="px-4 py-2.5 text-on-surface text-right">-0.452</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$61,340</td>
+<td class="px-4 py-2.5 text-on-surface text-right">31.2%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">44.5%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">65%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-error-container text-on-error-container border border-[#fecaca]">Default</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-2.5 text-on-surface-variant">APP-0924</td>
+<td class="px-4 py-2.5 text-on-surface text-right">2.301</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$12,000</td>
+<td class="px-4 py-2.5 text-on-surface text-right">5.2%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">18.1%</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-[#10b981]">8%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">Current</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group bg-secondary-container/20">
+<td class="px-4 py-2.5 text-on-surface-variant relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#8b5cf6] hidden group-hover:block"></div>
+<span class="flex items-center gap-1">SYN-1002 <span class="material-symbols-outlined text-[14px] text-[#8b5cf6]" title="Synthetic SMOTE Row">auto_awesome</span></span>
+</td>
+<td class="px-4 py-2.5 text-on-surface text-right">-0.981</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$75,100</td>
+<td class="px-4 py-2.5 text-on-surface text-right">38.9%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">49.2%</td>
+<td class="px-4 py-2.5 text-on-surface text-right text-error font-semibold">78%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-error-container text-on-error-container border border-[#fecaca]">Default</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-4 py-2.5 text-on-surface-variant">APP-0926</td>
+<td class="px-4 py-2.5 text-on-surface text-right relative">
+<span class="flex items-center justify-end gap-1" title="Imputed Median Value">
+<span class="material-symbols-outlined text-[12px] text-[#3b82f6]">healing</span>
+                                        0.000
+                                    </span>
+</td>
+<td class="px-4 py-2.5 text-on-surface text-right">$31,000</td>
+<td class="px-4 py-2.5 text-on-surface text-right">15.8%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">29.4%</td>
+<td class="px-4 py-2.5 text-on-surface text-right">42%</td>
+<td class="px-4 py-2.5 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-[#fef9c3] text-[#854d0e] border border-[#fef08a]">At Risk</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-unit-md py-3 border-t border-outline-variant bg-surface-container flex justify-between items-center text-label-md font-label-md text-on-surface-variant">
+<span>Showing 1 to 6 of 14,204 entries (incl. 2,104 synthetic)</span>
+<div class="flex gap-2">
+<button class="px-2 py-1 border border-outline-variant rounded hover:bg-white disabled:opacity-50" disabled="">&lt; Prev</button>
+<button class="px-2 py-1 border border-outline-variant rounded hover:bg-white">Next &gt;</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+        // --- UNIVERSAL LOCALSTORAGE STATE PERSISTENCE ---
+        const pageKey = window.location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home';
+        document.querySelectorAll("input, select, textarea").forEach((el, index) => {
+            if (!el.id) el.id = `auto-id-${pageKey}-${index}`;
+            
+            // Restore
+            const savedVal = localStorage.getItem(el.id);
+            if (savedVal !== null) {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = (savedVal === 'true');
+                } else {
+                    el.value = savedVal;
+                }
+            }
+            
+            // Save on change
+            el.addEventListener("change", () => {
+                const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+                localStorage.setItem(el.id, val);
+            });
+            el.addEventListener("input", () => {
+                const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+                localStorage.setItem(el.id, val);
+            });
+        });
+        // -------------------------------------------------
+
+        const showMessage = (msg) => {
+            let toast = document.createElement("div");
+            toast.className = "fixed bottom-6 right-6 bg-primary text-white px-5 py-4 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 z-50 font-medium";
+            toast.innerHTML = `<span class="material-symbols-outlined">info</span><p class="text-sm">${msg}</p>`;
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.classList.remove('translate-y-10', 'opacity-0'); });
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+    document.querySelectorAll("button, a").forEach(el => {
+        // Ignore real navigation links
+        if (el.tagName === "A" && el.getAttribute("href") && el.getAttribute("href").startsWith("/")) {
+            return; 
+        }
+        // Ignore chart buttons or pagination that might have specific scripts
+        
+        el.addEventListener("click", (e) => { return; 
+            // Prevent default for empty anchors
+            if (el.tagName === "A" && el.getAttribute("href") === "#") {
+                e.preventDefault();
+            }
+            
+            let text = el.innerText.trim().split("\n")[0];
+            if(!text) text = "Action";
+            
+            // Only attach to buttons that look like actions (not small icons)
+            if(text.length < 3 && el.tagName === "BUTTON") {
+                text = "System Action";
+            }
+            
+            // Show toast
+            let toast = document.createElement("div");
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.right = "20px";
+            toast.style.backgroundColor = "#1b1b1d";
+            toast.style.color = "#ffffff";
+            toast.style.padding = "12px 24px";
+            toast.style.borderRadius = "8px";
+            toast.style.zIndex = "9999";
+            toast.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+            toast.style.fontFamily = "sans-serif";
+            toast.style.transition = "opacity 0.3s ease";
+            toast.innerText = "Executing: " + text + "...";
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.backgroundColor = "#10b981";
+                /* dummy */
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            }, 1000);
+        });
+    });
+});
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- UNIVERSAL LOCALSTORAGE STATE PERSISTENCE ---
+        const pageKey = window.location.pathname.replace(/[^a-zA-Z0-9]/g, '_') || 'home';
+        document.querySelectorAll("input, select, textarea").forEach((el, index) => {
+            if (!el.id) el.id = `auto-id-${pageKey}-${index}`;
+            
+            // Restore
+            const savedVal = localStorage.getItem(el.id);
+            if (savedVal !== null) {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = (savedVal === 'true');
+                } else {
+                    el.value = savedVal;
+                }
+            }
+            
+            // Save on change
+            el.addEventListener("change", () => {
+                const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+                localStorage.setItem(el.id, val);
+            });
+            el.addEventListener("input", () => {
+                const val = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+                localStorage.setItem(el.id, val);
+            });
+        });
+        // -------------------------------------------------
+
+        const showMessage = (msg) => {
+            let toast = document.createElement("div");
+            toast.className = "fixed bottom-6 right-6 bg-primary text-white px-5 py-4 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 z-50 font-medium";
+            toast.innerHTML = '<span class="material-symbols-outlined">info</span><p class="text-sm">' + msg + '</p>';
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.classList.remove('translate-y-10', 'opacity-0'); });
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+        
+        const runBtn = document.getElementById('run-pipeline-btn');
+        if (runBtn) {
+            runBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+                let originalText = runBtn.innerHTML;
+                runBtn.innerText = "Transforming...";
+                
+                try {
+                    let sel = document.getElementById('model-select');
+                    let modelQuery = sel ? "?model=" + encodeURIComponent(sel.value) : "";
+                    let res = await fetch("/api/pipeline" + modelQuery);
+                    let data = await res.json();
+                    
+                    if(data.success && data.data && data.data.length > 0) {
+                        showMessage("Pipeline Executed: " + data.data.length + " rows processed.");
+                        
+                        let tbody = document.querySelector("tbody");
+                        if(tbody) {
+                            let html_str = "";
+                            data.data.forEach(row => {
+                                let badgeClass = row.status === 'CURRENT' ? 'bg-[#10b981]/20 text-[#10b981]' : 'bg-[#ef4444]/20 text-[#ef4444]';
+                                html_str += '<tr class="border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors">';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-primary">' + row.id + '</td>';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-on-surface-variant text-right">' + row.income + '</td>';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-on-surface-variant text-right">' + row.debt + '</td>';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-on-surface-variant text-right">' + row.pti + '</td>';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-[#ef4444] text-right font-medium">' + row.dti + '</td>';
+                                html_str += '<td class="py-3 px-4 font-data-mono text-[#10b981] text-right">' + row.util + '</td>';
+                                html_str += '<td class="py-3 px-4 text-right"><span class="' + badgeClass + ' px-2 py-1 rounded text-[11px] font-bold tracking-wider">' + row.status + '</span></td>';
+                                html_str += '</tr>';
+                            });
+                            tbody.innerHTML = html_str;
+                        }
+                    } else {
+                        showMessage("Error: " + data.error);
+                    }
+                } catch(err) {
+                    console.error(err);
+                    showMessage("Error connecting to data pipeline engine.");
+                }
+                runBtn.innerHTML = originalText;
+            });
+        }
+    });
+</script>
+</body></html>
