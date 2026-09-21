@@ -1,45 +1,30 @@
-# Nested git backups (individual task repo git data)
-_git_bak/
 
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
+*.pyo
+*.pyd
 .Python
-env/
+
+# Virtual environments
 venv/
-.venv/
-*.egg-info/
-dist/
-build/
-.eggs/
+env/
+.env/
 
-# Jupyter
-.ipynb_checkpoints/
+# Large binary files - datasets & raw data
+*.npy
+*.pkl
+*.tar.gz
+*.zip
+*.wav
+*.mp4
 
-# Note: Large binary/model files (*.npy, *.pkl, *.pth, *.joblib)
-# are tracked via Git LFS — do NOT exclude them here
+# Backup files
+*.bak
 
-# OS
+# Raw training datasets
+data/raw/
+
+# OS files
 .DS_Store
 Thumbs.db
-desktop.ini
-
-# IDE
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-
-# Logs
-*.log
-logs/
-
-# Env files
-.env
-.env.*
-
-# Temporary files
-*.tmp
-*.temp
